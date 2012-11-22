@@ -11,26 +11,48 @@ var favClass;
 var songId;
 
 function main() {
-  // make life easier later
+  // Shortcuts
   favButton = document.getElementById("playerFav");
   playButton = document.getElementById("playerPlay");
 
-  // set play and fav state
-  playState = playButton.getAttribute("class").split(" ")[1]=="pause" ? "pause" : "play";
-  favClass = favButton.getAttribute("class");
-  favState = favClass.split(" ")[1];
-  songId = favClass.split(" ")[0].split("_")[2];
+  // Get classes on the favorite button 
+  favClasses = favButton.getAttribute("class");
 
+  // Set initial load junk
+  playState = playButton.getAttribute("class").split(" ")[1] == "pause" ? "pause" : "play";
+  favState = favClasses.split(" ")[1];
+  songId = favClasses.split(" ")[0].split("_")[2];
+
+  // Let background page know the tab loaded.  Send it initial load info.
   alertBackground(playState, favState, songId);
 
-  console.log('Found some stuff. playState: '+playState+', favState: '+favState+', songId: '+songId);
 
+  // Listener to update favState when accessed through the website
+  favButton.onclick = function() {
+    favState = favClasses.split(" ")[1];
+    chrome.extension.sendMessage({hype: 'favUpdate', fs: favState});
+  }
   // Notify extension that the tab is being closed
   window.onbeforeunload = function () {
     chrome.extension.sendMessage({hype: 'closed'});
   }
   
 } // End main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //  Alert the background script of the Hypem tab
 function alertBackground(p, f, s) {

@@ -1,6 +1,6 @@
 var tabid;
-var favState;
-var playState;
+var favState = 'fav-off';
+var playState = 'play';
 var haveTab = false;
 var currentTrack = "No Hype Machine tab found. Open one!";
 var currentBlurb = "Nothing to see here! Load up a Hype Machine tab!";
@@ -15,7 +15,10 @@ chrome.extension.onMessage.addListener(function(request, sender) {
         playState = request.ps;
         songId = request.sid;
         haveTab = true;
-        console.log('Tab loaded. Tab ID: '+tabid+', favState: '+favState+', haveTab: '+haveTab+', playState: '+playState+', songId: '+songId);
+        break;
+
+      case "favUpdate":
+        favState = request.fs;
         break;
     }
 });

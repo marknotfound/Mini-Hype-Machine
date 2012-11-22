@@ -1,98 +1,42 @@
 // Work around for onload not firing correctly
-window.onload = setTimeout('runExt()', 500); 
+// hacky but whatever
+window.onload = setTimeout('main()', 500); 
 
-function runExt() {
-  // Main function
-  var playNext = document.getElementById('playerNext');
-  var playPrev = document.getElementById('playerPrev');
-  var pausePlay = document.getElementById('playerPlay');
-  var fav = document.getElementById('playerFav');
-  var favState = fav.getAttribute('class');
-  favState = favState.split(' ')[1];
-  var playState = 'play';
-  var nowPlaying;
-  var songId;
-  var songBlurb;
+// Initialize stuff
+var playButton;
+var favButton;
+var playState;
+var favState;
+var favClass;
+var songId;
 
-  //pausePlay.onclick = updatePlay;
-  pausePlay.addEventListener('click', function () {
-    updatePlay();
-  });
-  alertBackground(favState);
+function main() {
+  // make life easier later
+  favButton = document.getElementById("playerFav");
+  playButton = document.getElementById("playerPlay");
 
-  // Listen for commands
-  chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-    var todo = request.todo;
-    songId = document.getElementById('playerFav').getAttribute('class').split(' ')[0].substring(9);
-    switch(todo) {
-      case 'next':
-        playNext.click();
-        favState = document.getElementById('playerFav').getAttribute('class').split(' ')[1];
-        songId = document.getElementById('playerFav').getAttribute('class').split(' ')[0].substring(9);
-        nowPlaying = document.getElementById('player-nowplaying').innerHTML;
-        songBlurb = findBlurb(songId);
-        break;
-      case 'prev':
-        playPrev.click();
-        favState = document.getElementById('playerFav').getAttribute('class').split(' ')[1];
-        songId = document.getElementById('playerFav').getAttribute('class').split(' ')[0].substring(9);
-        nowPlaying = document.getElementById('player-nowplaying').innerHTML;
-        songBlurb = findBlurb(songId);
-        break;
-      case 'pp':
-        pausePlay.click();
-        playState = pausePlay.getAttribute('class').split(' ')[1];
-        break;
-      case 'fav':
-        document.getElementById('playerFav').click();
-        favState = document.getElementById('playerFav').getAttribute('class').split(' ')[1];
-        break;
-      case 'update':
-        favState = document.getElementById('playerFav').getAttribute('class').split(' ')[1];
-        playState = document.getElementById('playerPlay').getAttribute('class').split(' ')[1];
-        nowPlaying = document.getElementById('player-nowplaying').innerHTML;
-        songBlurb = findBlurb(songId);
-        break;
-    }
-    chrome.extension.sendMessage({hype: 'update', ps: playState, fs: favState});
-    if(playState == undefined) { playState = 'play'; }
-    sendResponse({done: true, f: favState, p: playState, nP: nowPlaying, sB: songBlurb, sId: songId});  
-  });
+  // set play and fav state
+  playState = playButton.getAttribute("class").split(" ")[1]=="pause" ? "pause" : "play";
+  favClass = favButton.getAttribute("class");
+  favState = favClass.split(" ")[1];
+  songId = favClass.split(" ")[0].split("_")[2];
 
+  alertBackground(playState, favState, songId);
 
-  // Listener to check favState
-  chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-    if(request.question=='isthisfavorite') {
-      var f = document.getElementById('playerFav').getAttribute('class').split(' ')[1];
-      if(f == 'fav-on') 
-        sendResponse({answer: 'yes'});
-      else 
-        sendResponse({answer: 'no'});
-    }
-  });
+  console.log('Found some stuff. playState: '+playState+', favState: '+favState+', songId: '+songId);
 
+  // Notify extension that the tab is being closed
   window.onbeforeunload = function () {
-    // Notify extension that the tab is being closed
     chrome.extension.sendMessage({hype: 'closed'});
   }
   
+} // End main()
+
+//  Alert the background script of the Hypem tab
+function alertBackground(p, f, s) {
+  chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s});
 }
-// Update the playState (from the hypem.com, not the extension)
-function updatePlay() {
-  var playState = document.getElementById('playerPlay').getAttribute('class').split(' ')[1];
-  chrome.extension.sendMessage({hype: 'updatePlay', ps: playState});
-}
-// Update the favState (from the hypem.com, not the extension)
-function updateFav() {
-  var favState = document.getElementById('playerFav').getAttribute('class').split(' ')[1];
-  chrome.extension.sendMessage({hype: 'updateFav', fs: favState});
-}
-// Alert background script of Hype tab id
-function alertBackground(fs) {
-  chrome.extension.sendMessage({greeting: "loaded", f: fs}, function(response) {
-    
-  });
-}
+
 // Fuck this function.  Tries to find a song blurb.  Bugs the fuck out if you're not on the page the song originated from
 function findBlurb(songID) {
     var trackDiv = document.getElementById('section-track-'+songID);
@@ -126,8 +70,8 @@ function findBlurb(songID) {
           }
       }
       found = false;
+      
       // Find second child node
-    
       while(!found) {
           try {
               temp = trackDiv.childNodes[childOne].childNodes[childTwo].getAttribute('class');

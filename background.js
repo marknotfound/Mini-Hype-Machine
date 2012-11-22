@@ -1,32 +1,21 @@
 var tabid;
 var favState;
-var playState = 'play';
+var playState;
 var haveTab = false;
-var currentSong;
-var currentBlurb;
-var songId = '';
-var songBlurb = '';
+var currentTrack = "No Hype Machine tab found. Open one!";
+var currentBlurb = "Nothing to see here! Load up a Hype Machine tab!";
+var songId;
 
-  // Listener to get the Hypem tab ID on load and update favState and playState
-  chrome.extension.onMessage.addListener(function(request, sender) {
-    // haveTab makes it so if you open a second tab it doesn't fuck anything up.
-    if(!haveTab) {
-      if(request.greeting=='loaded') {
+// Listener to get the Hypem tab ID on load and update favState and playState
+chrome.extension.onMessage.addListener(function(request, sender) {
+    switch(request.hype) {
+      case "loaded": // Tab loaded
         tabid = sender.tab.id;
-        favState = request.f; // Initial favState
+        favState = request.fs;
+        playState = request.ps;
+        songId = request.sid;
         haveTab = true;
-      }
+        console.log('Tab loaded. Tab ID: '+tabid+', favState: '+favState+', haveTab: '+haveTab+', playState: '+playState+', songId: '+songId);
+        break;
     }
-    if(request.hype=='update') {
-      favState = request.fs;
-      playState = request.ps;
-    } else if(request.hype=='updatePlay') {
-      playState = request.ps;
-    } else if(request.hype=='updateFav') {
-      favState = request.fs;
-    } else if(request.hype=='closed') {
-      playState = 'play';
-      favState = 'fav-off';
-      haveTab = false; // Make room for a new tab to open up
-    }
-  });
+});

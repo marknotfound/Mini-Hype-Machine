@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Unofficial Hypem Extension</title>
+    
+    <style>
+    html, body {
+      background-color: #F3F3F3;
+      padding: 0px;
+      width: 400px;
+      margin: 0 auto;
+      text-align: center;
+      font-family: 'Helvetica','Arial',sans-serif;
+      color: #000000;
+      font-weight: bold;
+    }
+    #controlsDiv {
+      background-color: #83C441;
+      height: 34px;
+      padding-top: 10px;
+    }
+    #controls {
+      background-color: black;
+      float: right;
+      margin-top: -1px;
+      height: 33px;
+      padding-top: 2px;
+    }
+    #logo {
+      float: left;
+      margin: 8px 0px 0px 7px;
+      background: url(images/hype.png) left bottom no-repeat;
+      display: block;
+      height: 28px;
+      left: 0px;
+      position: absolute;
+      top: 2px;
+      width: 232px;
+    }
+    #logo:hover {
+      background: url(images/hype.png) left top no-repeat;
+    }
+    #banner {
+      background-color: transparent;
+    }
+    #track {
+      background-color: #000000;
+      color: #FFFFFF;
+      padding: 5px 0px 5px 0px;
+      font-size: 14px;
+    }
+    #content {
+      padding: 5px 0px 5px 5px;
+      font-size: 14px;
+      font-weight: normal;
+      color: #555;
+      border-top: 2px solid #ffffff;
+      text-align: left;
+    }
+    #content a {
+      color: #0063DC;
+      font-style: italic;
+      text-decoration: none;
+    }
+    #content a:hover {
+      color: #0063DC;
+      text-decoration: underline;
+    }
+    a {
+      outline: none;
+      text-decoration: none;
+    }
+    #track a {
+      color: #FFFFFF;
+      text-decoration: none;
+      outline: none;
+    }
+    #track a:hover {
+      text-decoration: underline;
+    }
+    #goPrev, #goPlay, #goNext, #goFav {
+      border-left: 1px solid #272727;
+      cursor: pointer;
+      display: block;
+      float: left;
+      height: 33px;
+      overflow: hidden;
+      top: 0;
+      width: 33px;
+    }
+    #goPrev, #goNext {
+      background: url(images/player-controls-new.png) no-repeat;
+    }
+    #goPrev {
+      background-position: -64px 0px;
+      border-left: 1px solid #272727;
+    }
+    #goPrev:hover {
+      background-position: -64px -32px;
+    }
+    #goNext {
+      background-position: -96px 0px;
+      border-right: 1px solid #272727;
+    }
+    #goNext:hover {
+      background-position: -96px -32px;
+    }
+    .play, .pause, .play:hover, .pause:hover {
+      background: url(images/player-controls-new.png) no-repeat;
+    }
+    .play {
+      background-position: 0px 0px;
+    }
+    .pause {
+      background-position: -32px 0px;
+    }
+    .play:hover {
+      background-position: 0px -32px;
+    }
+    .pause:hover {
+      background-position: -32px -32px;
+    }
+    .fav-on {
+      background: url(images/icon-fav-player.png) no-repeat;
+      background-position: 0 -64px;
+    }
+    .fav-off {
+      background: url(images/icon-fav-player.png) no-repeat;
+      background-position: 0 0px;
+    }
+    .fav-off:hover {
+      background: url(images/icon-fav-player.png) no-repeat;
+      background-position: 0 -32px;
+    }
+    </style>
+    <script type='text/javascript' src='hi.js'></script>
+
+
+  </head>
+  <body>
+    <div id='controlsDiv'>
+      <a href='http://www.hypem.com/' target='_blank' id='logo'></a>
+      <div id='controls'>
+        <a id='goPrev' href='#'></a>
+        <a id='goPlay' href='#' class='play'></a>
+        <a id='goFav' href='#' class='fav-off'></a>
+        <a id='goNext' href='#'></a>
+      </div>
+    </div>
+    <div id='track'>
+      <a href='http://www.hypem.com/' target='_blank'>No Hype Machine tab found. Open one!</a>
+    </div>
+    <div id='content'>
+    Nothing to see here! <a href='http://www.hypem.com/' target='_blank'>Load up a Hype Machine tab!</a>
+    </div>
+  </body>
+</html>

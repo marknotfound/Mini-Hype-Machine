@@ -1,0 +1,26 @@
+{
+  "name": "Mini Hype Machine",
+  "version": "2.1",
+  "manifest_version": 2,
+  "description": "Pause, skip, favorite, and read about each song on Hypem.com without ever having to find the tab!",
+  "permissions": ["tabs"],
+  "browser_action": {
+    "default_title": "Mini Hype Machine",
+    "default_icon": "images/icon16.png",
+    "default_popup": "hi.html"
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://hypem.com/*"],
+      "js": ["hype-script.js"]
+    }
+  ]
+}

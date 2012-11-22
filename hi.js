@@ -7,9 +7,9 @@ var banner;
 var artist;
 var track;
 var postURL;
-var songStr;
+var songStr = bg.currentTrack;
+var songBlurb = bg.currentBlurb;
 var nowPlayingHTML;
-var songBlurb;
 var nPArr = new Array();
 var next;
 var prev;
@@ -37,12 +37,6 @@ window.onload = function () {
 	setTimeout(function() {
 		pp.className = playState;
 		fav.className = favState;
-		artist = nPArr[7].slice(0,-3);
-		track = nPArr[11].slice(0,-3);
-		postURL = nPArr[12].slice(28,-1);
-		songStr = '<a href="'+postURL+'" target="_blank">'+artist+' - '+track+'</a>';
-		songBlurb += ' <a href="'+postURL+'" target="_blank">Read more...</a>';
-		
 		trackDiv.innerHTML = songStr;
 		contentDiv.innerHTML = songBlurb;
 	}, 250);

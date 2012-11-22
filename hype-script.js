@@ -32,6 +32,12 @@ function main() {
     favState = favClasses.split(" ")[1];
     chrome.extension.sendMessage({hype: 'favUpdate', fs: favState});
   }
+
+  // Listener to update favState when accessed through the website
+  playButton.onclick = function() {
+    playState = playButton.getAttribute("class").split(" ")[1];
+    chrome.extension.sendMessage({hype: 'playUpdate', ps: playState});
+  }
   // Notify extension that the tab is being closed
   window.onbeforeunload = function () {
     chrome.extension.sendMessage({hype: 'closed'});

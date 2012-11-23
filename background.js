@@ -27,7 +27,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       case "updateAll":
         playState = request.ps;
         favState = request.fs;
-        songId = request.songId;
+        songId = request.sid;
+        currentBlurb = request.sb;
         break;
     }
 

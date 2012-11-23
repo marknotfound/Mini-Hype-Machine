@@ -11,6 +11,7 @@ var playPrev;
 var favState;
 var favClass;
 var songId;
+var songBlurb;
 
 function main() {
   // Shortcuts
@@ -78,22 +79,23 @@ function main() {
         break;
 
       case "update":
-        // Run on each popup load.
+        // Run on each popup load. Just blank to refresh information.
         break;
     }
 
     // Update some things
     favClasses = favButton.getAttribute("class");
     songId = favClasses.split(" ")[0].split("_")[2];
+    songBlurb = findBlurb(songId);
     playState = playButton.getAttribute("class").split(" ")[1];
     playState = playState==undefined ? "play" : playState;
     favState = document.getElementById("playerFav").getAttribute("class").split(" ")[1];
 
     // Update background.js
-    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId}, function(response) {
+    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb}, function(response) {
       // Do nothing. Just making sure we wait for it to complete.
       if(response.bgupdate) {
-        console.log('SENT PLAYSTATE: '+playState+', FAVSTATE: '+favState+', SONGID: '+songId);
+        console.log('SENT PLAYSTATE: '+playState+', FAVSTATE: '+favState+', SONGID: '+songId+', SONGBLURB: '+songBlurb);
       }
     });
 

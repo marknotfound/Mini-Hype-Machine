@@ -8,7 +8,7 @@ var artist;
 var track;
 var postURL;
 var songStr = bg.currentTrack;
-var songBlurb = bg.currentBlurb;
+
 var nowPlayingHTML;
 var nPArr = new Array();
 var next;
@@ -26,7 +26,7 @@ window.onload = function () {
 		pp.className = bg.playState;
 		fav.className = bg.favState;
 		trackDiv.innerHTML = songStr;
-		contentDiv.innerHTML = songBlurb;
+		contentDiv.innerHTML = bg.currentBlurb;
 	});
 
 	console.log('Current playState from bg: '+bg.favState);
@@ -37,6 +37,7 @@ window.onload = function () {
 	trackDiv = document.getElementById('track');
 	contentDiv = document.getElementById('content');
 
+	// Bind functions to click events
 	next.onclick = nextSong;
 	prev.onclick = prevSong;
 	pp.onclick = pausePlay;

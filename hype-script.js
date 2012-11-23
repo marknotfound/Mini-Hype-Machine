@@ -12,6 +12,9 @@ var favState;
 var favClass;
 var songId;
 var songBlurb;
+var artist;
+var track;
+var readMore;
 
 function main() {
   // Shortcuts
@@ -90,9 +93,13 @@ function main() {
     playState = playButton.getAttribute("class").split(" ")[1];
     playState = playState==undefined ? "play" : playState;
     favState = document.getElementById("playerFav").getAttribute("class").split(" ")[1];
+    artist = getArtist();
+    track = getTrackTitle();
+    readMore = getPost();
+    
 
     // Update background.js
-    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb}, function(response) {
+    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb, a: artist, t: track, rm: readMore}, function(response) {
       // Do nothing. Just making sure we wait for it to complete.
       if(response.bgupdate) {
         console.log('SENT PLAYSTATE: '+playState+', FAVSTATE: '+favState+', SONGID: '+songId+', SONGBLURB: '+songBlurb);
@@ -133,6 +140,19 @@ function main() {
 //  Alert the background script of the Hypem tab
 function alertBackground(p, f, s) {
   chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s});
+}
+
+// Returns artist name
+function getArtist() {
+  return document.getElementById('player-nowplaying').childNodes[1].innerText;
+}
+// Returns track title
+function getTrackTitle() {
+  return document.getElementById('player-nowplaying').childNodes[3].innerText;
+}
+// Returns post URL wrapping 'Read More'.  HTML.
+function getPost() {
+  return document.getElementById('player-nowplaying').childNodes[4].getAttribute('href');
 }
 // Fuck this function.  Tries to find a song blurb.  Bugs the fuck out if you're not on the page the song originated from
 function findBlurb(songID) {

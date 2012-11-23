@@ -74,7 +74,7 @@ function main() {
         break;
 
       case "fav":
-        favButton.click();
+        document.getElementById("playerFav").click();
         break;
 
       case "update":
@@ -86,11 +86,16 @@ function main() {
     favClasses = favButton.getAttribute("class");
     songId = favClasses.split(" ")[0].split("_")[2];
     playState = playButton.getAttribute("class").split(" ")[1];
-    console.log(playState);
-    favState = favClasses.split(" ")[1];
+    playState = playState==undefined ? "play" : playState;
+    favState = document.getElementById("playerFav").getAttribute("class").split(" ")[1];
 
     // Update background.js
-    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId});
+    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId}, function(response) {
+      // Do nothing. Just making sure we wait for it to complete.
+      if(response.bgupdate) {
+        console.log('SENT PLAYSTATE: '+playState+', FAVSTATE: '+favState+', SONGID: '+songId);
+      }
+    });
 
     // Send response to hi.js
     sendResponse({done: true});

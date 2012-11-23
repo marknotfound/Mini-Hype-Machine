@@ -20,6 +20,16 @@ var trackDiv;
 var contentDiv;
 
 window.onload = function () {
+	// Update all controls.
+	chrome.tabs.sendMessage(tabId, {todo: "update"}, function(response) {
+		// Set up the UI buttons
+		pp.className = bg.playState;
+		fav.className = bg.favState;
+		trackDiv.innerHTML = songStr;
+		contentDiv.innerHTML = songBlurb;
+	});
+
+	console.log('Current playState from bg: '+bg.favState);
 	next = document.getElementById('goNext');
 	prev = document.getElementById('goPrev');
 	pp = document.getElementById('goPlay');
@@ -31,14 +41,6 @@ window.onload = function () {
 	prev.onclick = prevSong;
 	pp.onclick = pausePlay;
 	fav.onclick = favorite;
-
-	// Set up UI
-	setTimeout(function() {
-		pp.className = playState;
-		fav.className = favState;
-		trackDiv.innerHTML = songStr;
-		contentDiv.innerHTML = songBlurb;
-	}, 250);
 	
 }
 function nextSong() {
@@ -56,14 +58,15 @@ function prevSong() {
 }
 function pausePlay() {
 	if(haveTab) {
-		chrome.tabs.sendMessage(tabId, {todo: "pp"});
+		chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
 			pp.className = bg.playState;
-			console.log("New playState: "+pp.className);
+		});
 	}
 }
 function favorite() {
 	if(haveTab) {
-	  	chrome.tabs.sendMessage(tabId, {todo: "fav"});
+	  	chrome.tabs.sendMessage(tabId, {todo: "fav"}, function(response) {
 	  		fav.className = bg.favState;
+	  	});
 	}
 }

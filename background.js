@@ -7,7 +7,7 @@ var currentBlurb = "Nothing to see here! Load up a Hype Machine tab!";
 var songId;
 
 // Listener to get the Hypem tab ID on load and update favState and playState
-chrome.extension.onMessage.addListener(function(request, sender) {
+chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     switch(request.hype) {
       case "loaded": // Tab loaded
         tabid = sender.tab.id;
@@ -30,4 +30,6 @@ chrome.extension.onMessage.addListener(function(request, sender) {
         songId = request.songId;
         break;
     }
+
+    sendResponse({bgupdate: true});
 });

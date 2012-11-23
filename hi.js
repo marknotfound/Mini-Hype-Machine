@@ -44,6 +44,8 @@ function nextSong() {
 	  chrome.tabs.sendMessage(tabId, {todo: "next"}, function(response) {
 	  		fav.className = bg.favState;
 		  	pp.className = bg.playState;
+		  	trackDiv.innerHTML = bg.currentTrack;
+		  	contentDiv.innerHTML = bg.currentBlurb;
 	  });
 	}
 }
@@ -52,6 +54,8 @@ function prevSong() {
 	  chrome.tabs.sendMessage(tabId, {todo: "prev"}, function(response) {
 	  		fav.className = bg.favState;
 	  		pp.className = bg.playState;
+	  		trackDiv.innerHTML = bg.currentTrack;
+		  	contentDiv.innerHTML = bg.currentBlurb;
 	  });
 	}
 }

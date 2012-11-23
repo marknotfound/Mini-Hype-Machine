@@ -87,12 +87,11 @@ function main() {
     }
 
     // Update some things
-    favClasses = favButton.getAttribute("class");
-    songId = favClasses.split(" ")[0].split("_")[2];
-    songBlurb = findBlurb(songId);
+    songId = getSongID();
     playState = playButton.getAttribute("class").split(" ")[1];
     playState = playState==undefined ? "play" : playState;
-    favState = document.getElementById("playerFav").getAttribute("class").split(" ")[1];
+    favState = getFavState();
+    songBlurb = findBlurb(songId);
     artist = getArtist();
     track = getTrackTitle();
     readMore = getPost();
@@ -100,12 +99,10 @@ function main() {
 
     // Update background.js
     chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb, a: artist, t: track, rm: readMore}, function(response) {
-      // Do nothing. Just making sure we wait for it to complete.
-      if(response.bgupdate) {
-        console.log('SENT PLAYSTATE: '+playState+', FAVSTATE: '+favState+', SONGID: '+songId+', SONGBLURB: '+songBlurb);
-      }
+      // Do nothing. Just making sure we wait for it to complete before sending the response.
     });
 
+    console.log('Send Blurb: '+songBlurb);
     // Send response to hi.js
     sendResponse({done: true});
   });
@@ -154,6 +151,14 @@ function getTrackTitle() {
 function getPost() {
   return document.getElementById('player-nowplaying').childNodes[4].getAttribute('href');
 }
+// Returns song ID 
+function getSongID() {
+  return document.getElementById("playerFav").getAttribute("class").split(" ")[0].split("_")[2];
+}
+// Returns fav state
+function getFavState() {
+   return document.getElementById("playerFav").getAttribute("class").split(" ")[1]; 
+} 
 // Fuck this function.  Tries to find a song blurb.  Bugs the fuck out if you're not on the page the song originated from
 function findBlurb(songID) {
     var trackDiv = document.getElementById('section-track-'+songID);

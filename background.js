@@ -37,6 +37,9 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         artist = request.a;
         track = request.t;
         currentTrack = artist+' - '+track;
+
+        console.log('Current Track: '+currentTrack);
+        console.log('Current Blurb: '+currentBlurb);
         break;
     }
 

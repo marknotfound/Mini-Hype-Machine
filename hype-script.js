@@ -31,11 +31,15 @@ function main() {
     /*   BEGIN INITIALIZATION STUFF. SAY HELLO TO THE BACKGROUND SCRIPT!
     /*
     /*************************************************************************/
-    // Shortcuts
+    // Cache control elements
     favButton = document.getElementById("playerFav");
     playButton = document.getElementById("playerPlay");
     playNext = document.getElementById("playerNext");
     playPrev = document.getElementById("playerPrev");
+    infiniteTracks = document.getElementById("infinite-tracks-button");
+
+    // Load moar tracks
+    infiniteTracks.click();
 
     // Get classes on the favorite button 
     favClasses = favButton.getAttribute("class");
@@ -107,6 +111,7 @@ function main() {
       playState = playState==undefined ? "play" : playState;
       favState = getFavState();
       songBlurb = findBlurb(songId);
+      console.log(songBlurb);
       artist = getArtist();
       track = getTrackTitle();
       readMore = getPost();

@@ -16,15 +16,7 @@ var trackDiv;
 var contentDiv;
 
 window.onload = function () {
-
-	// Update all controls.
-	chrome.tabs.sendMessage(tabId, {todo: "update"}, function(response) {
-		pp.className = bg.playState;
-		fav.className = bg.favState;
-		trackDiv.innerHTML = bg.currentTrack;
-		contentDiv.innerHTML = bg.currentBlurb;
-	});
-
+	// Some setup stuff...
 	next = document.getElementById('goNext');
 	prev = document.getElementById('goPrev');
 	pp = document.getElementById('goPlay');
@@ -37,6 +29,24 @@ window.onload = function () {
 	prev.onclick = prevSong;
 	pp.onclick = pausePlay;
 	fav.onclick = favorite;
+
+	// Set up the buttons
+	// Update all controls.
+	if(haveTab) {
+		chrome.tabs.sendMessage(tabId, {todo: "update"}, function(response) {
+			pp.className = bg.playState;
+			fav.className = bg.favState;
+			trackDiv.innerHTML = bg.currentTrack;
+			contentDiv.innerHTML = bg.currentBlurb;
+		});
+	} else {
+		// Just set stuff to the background page values and don't try to send a message.
+		pp.className = bg.playState;
+		fav.className = bg.favState;
+		trackDiv.innerHTML = bg.currentTrack;
+		contentDiv.innerHTML = bg.currentBlurb;
+	}
+	// Done setting up buttons!
 	
 }
 function nextSong() {

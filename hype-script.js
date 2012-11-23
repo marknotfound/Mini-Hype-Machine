@@ -1,8 +1,14 @@
-// Work around for onload not firing correctly
-// hacky but whatever
-window.onload = setTimeout('main()', 500); 
+// Check if there's already a Hype Machine tab open.
+var haveTab;
+chrome.extension.sendMessage({hype: 'tabCheck'}, function(response) {
+    haveTab = response.tabcheck;
+});
 
-// Initialize stuff
+// Work around for onload not firing correctly
+// hacky but whatever, it works.
+window.onload = setTimeout('main()', 500);
+
+// Initialize some variables
 var playButton;
 var favButton;
 var playState;
@@ -16,129 +22,127 @@ var artist;
 var track;
 var readMore;
 
+// Main function.  Hacky! Weee!
 function main() {
-  // Shortcuts
-  favButton = document.getElementById("playerFav");
-  playButton = document.getElementById("playerPlay");
-  playNext = document.getElementById("playerNext");
-  playPrev = document.getElementById("playerPrev");
-  // Get classes on the favorite button 
-  favClasses = favButton.getAttribute("class");
+  // Only run this if we don't already have a Hype Machine tab open.
+  if(!haveTab) {
+    /*************************************************************************/
+    /*
+    /*   BEGIN INITIALIZATION STUFF. SAY HELLO TO THE BACKGROUND SCRIPT!
+    /*
+    /*************************************************************************/
+    // Shortcuts
+    favButton = document.getElementById("playerFav");
+    playButton = document.getElementById("playerPlay");
+    playNext = document.getElementById("playerNext");
+    playPrev = document.getElementById("playerPrev");
 
-  // Set initial load junk
-  playState = playButton.getAttribute("class").split(" ")[1] == "pause" ? "pause" : "play";
-  favState = favClasses.split(" ")[1];
-  songId = favClasses.split(" ")[0].split("_")[2];
+    // Get classes on the favorite button 
+    favClasses = favButton.getAttribute("class");
 
-  // Let background page know the tab loaded.  Send it initial load info.
-  alertBackground(playState, favState, songId);
-
-  /*************************************************************************/
-  /*
-  /*   UPDATE BUTTON STATES FROM TAB (NOT EXT) ACTIVITY
-  /*
-  /*************************************************************************/
-
-  // Listener to update favState when accessed through the website
-  favButton.onclick = function() {
+    // Set initial load junk
+    playState = playButton.getAttribute("class").split(" ")[1] == "pause" ? "pause" : "play";
     favState = favClasses.split(" ")[1];
-    chrome.extension.sendMessage({hype: 'favUpdate', fs: favState});
-  }
+    songId = favClasses.split(" ")[0].split("_")[2];
 
-  // Listener to update favState when accessed through the website
-  playButton.onclick = function() {
-    playState = playButton.getAttribute("class").split(" ")[1];
-    chrome.extension.sendMessage({hype: 'playUpdate', ps: playState});
-  }
-
-  /*************************************************************************/
-  /*
-  /*   END BUTTON STATES FROM TAB HANDLING
-  /*
-  /*************************************************************************/
-
-
-  /*************************************************************************/
-  /*
-  /*   HANDLE INCOMING COMMANDS FROM HI.JS
-  /*
-  /*************************************************************************/
-  chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-    switch(request.todo) {
-      case "next":
-        playNext.click();
-        break;
-
-      case "prev":
-        playPrev.click();
-        break;
-
-      case "pp":
-        playButton.click();
-        break;
-
-      case "fav":
-        document.getElementById("playerFav").click();
-        break;
-
-      case "update":
-        // Run on each popup load. Just blank to refresh information.
-        break;
+    // Let background page know the tab loaded.  Send it initial load info.
+    alertBackground(playState, favState, songId);
+    /*************************************************************************/
+    /*
+    /*   END INITILIZATION STUFF (doesn't initilization look weird with a 'z'?)
+    /*
+    /*************************************************************************/
+    /*************************************************************************/
+    /*
+    /*   UPDATE BUTTON STATES FROM TAB (NOT EXT) ACTIVITY
+    /*
+    /*************************************************************************/
+    // Listener to update favState when accessed through the website
+    favButton.onclick = function() {
+      favState = favClasses.split(" ")[1];
+      chrome.extension.sendMessage({hype: 'favUpdate', fs: favState});
     }
 
-    // Update some things
-    songId = getSongID();
-    playState = playButton.getAttribute("class").split(" ")[1];
-    playState = playState==undefined ? "play" : playState;
-    favState = getFavState();
-    songBlurb = findBlurb(songId);
-    artist = getArtist();
-    track = getTrackTitle();
-    readMore = getPost();
-    
+    // Listener to update favState when accessed through the website
+    playButton.onclick = function() {
+      playState = playButton.getAttribute("class").split(" ")[1];
+      chrome.extension.sendMessage({hype: 'playUpdate', ps: playState});
+    }
+    /*************************************************************************/
+    /*
+    /*   END BUTTON STATES FROM TAB HANDLING
+    /*
+    /*************************************************************************/
+    /*************************************************************************/
+    /*
+    /*   HANDLE INCOMING MESSAGES FROM HI.JS
+    /*
+    /*************************************************************************/
+    chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+      switch(request.todo) {
+        case "next":
+          playNext.click();
+          break;
 
-    // Update background.js
-    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb, a: artist, t: track, rm: readMore}, function(response) {
-      // Do nothing. Just making sure we wait for it to complete before sending the response.
+        case "prev":
+          playPrev.click();
+          break;
+
+        case "pp":
+          playButton.click();
+          break;
+
+        case "fav":
+          document.getElementById("playerFav").click();
+          break;
+
+        case "update":
+          // Run on each popup load. Just blank to refresh information.
+          break;
+      }
+
+      // Update some things
+      songId = getSongID();
+      playState = playButton.getAttribute("class").split(" ")[1];
+      playState = playState==undefined ? "play" : playState;
+      favState = getFavState();
+      songBlurb = findBlurb(songId);
+      artist = getArtist();
+      track = getTrackTitle();
+      readMore = getPost();
+      
+      // Update background.js
+      chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb, a: artist, t: track, rm: readMore}, function(response) {
+        // Do nothing. Just making sure we wait for it to complete before sending the response.
+      });
+
+      // Send response to hi.js
+      sendResponse({done: true});
     });
+    /*************************************************************************/
+    /*
+    /*   END MESSAGE HANDLING
+    /*
+    /*************************************************************************/
 
-    console.log('Send Blurb: '+songBlurb);
-    // Send response to hi.js
-    sendResponse({done: true});
-  });
-  /*************************************************************************/
-  /*
-  /*   END COMMAND HANDLING
-  /*
-  /*************************************************************************/
-
-  // Notify extension that the tab is being closed
-  window.onbeforeunload = function () {
-    chrome.extension.sendMessage({hype: 'closed'});
-  }
-  
+    // Notify extension that the tab is being closed
+    window.onbeforeunload = function () {
+      chrome.extension.sendMessage({hype: 'closed'});
+    }
+  } // End haveTab if
 } // End main()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*************************************************************************/
+/*
+/*   FUNCTIONS AND THINGS
+/*
+/*************************************************************************/
 
 //  Alert the background script of the Hypem tab
 function alertBackground(p, f, s) {
   chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s});
 }
-
 // Returns artist name
 function getArtist() {
   return document.getElementById('player-nowplaying').childNodes[1].innerText;

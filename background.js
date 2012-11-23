@@ -30,6 +30,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
       case "playUpdate":
         playState = request.ps;
         break;
+
       case "updateAll":
         // Button states
         playState = request.ps;
@@ -38,15 +39,13 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         readMore = request.rm;
         readMore = "<a href='"+readMore+"' target='_blank'> Read Post »</a>";
         currentBlurb = songId==request.sid ? currentBlurb : request.sb+' '+readMore;
-        console.log('songid: '+songId);
-        console.log('sid: '+request.sid);
-        console.log(currentBlurb);
         // Track information
         songId = request.sid;
         artist = request.a;
         track = request.t;
         currentTrack = artist+' - '+track;
         break;
+
       case "closed": // lol, CASE CLOSED MOTHERFUCKER
         console.log('Tab closed.  Setting everything back to defaults...');
         setDefaults();
@@ -54,16 +53,18 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         break;
     }
 
-    sendResponse({bgupdate: true, tabcheck: haveTab });
+    sendResponse({bgupdate: true, tabcheck: haveTab});
 });
 
+// Just set up defaults when a tab closes.
+// Every time a tab closes, a developer gets his wings.
 function setDefaults() {
   tabid = '';
   favState = 'fav-off';
   playState = 'play';
   haveTab = false;
   currentTrack = "<a href='http://www.hypem.com'>No Hype Machine tab found. Open one!</a>";
-  currentBlurb = "<a href='http://www.hypem.com'>Nothing to see here! Load up a Hype Machine tab!</a>";
+  currentBlurb = "Nothing to see here! <a href='http://www.hypem.com' target='_blank'>Load up a Hype Machine tab!</a>";
   readMore = '';
   songId = '';
   artist = '';

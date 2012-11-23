@@ -111,7 +111,6 @@ function main() {
       playState = playState==undefined ? "play" : playState;
       favState = getFavState();
       songBlurb = findBlurb(songId);
-      console.log(songBlurb);
       artist = getArtist();
       track = getTrackTitle();
       readMore = getPost();

@@ -36,10 +36,6 @@ function main() {
     playButton = document.getElementById("playerPlay");
     playNext = document.getElementById("playerNext");
     playPrev = document.getElementById("playerPrev");
-    infiniteTracks = document.getElementById("infinite-tracks-button");
-
-    // Load moar tracks
-    infiniteTracks.click();
 
     // Get classes on the favorite button 
     favClasses = favButton.getAttribute("class");

@@ -50,9 +50,7 @@ function nextSong() {
 			nPArr = nowPlayingHTML.split('>');
 			songBlurb = response.sB;
 			songId = response.sId;
-	  		//pp.src='images/pause.png';
 	  		pp.className = 'pause';
-	  		//document.getElementById('goFav').src = 'images/'+response.f+'.png';
 	  		document.getElementById('goFav').className = response.f;
 	  		artist = nPArr[7].slice(0,-3);
 			track = nPArr[11].slice(0,-3);
@@ -73,17 +71,15 @@ function prevSong() {
 			nPArr = nowPlayingHTML.split('>');
 			songBlurb = response.sB;
 			songId = response.sId;
-	  		//pp.src='images/pause.png';
 	  		pp.className = 'pause';
-	  		//document.getElementById('goFav').src='images/'+response.f+'.png';
-	  		document.getElementById('goFav').className = response.f;
+	  		fav.className = response.f;
 	  		artist = nPArr[7].slice(0,-3);
 			track = nPArr[11].slice(0,-3);
 			postURL = nPArr[12].slice(28,-1);
 			songStr = '<a href="'+postURL+'" target="_blank">'+artist+' - '+track+'</a>';
 			songBlurb += ' <a href="'+postURL+'" target="_blank">Read more...</a>';
-			document.getElementById('track').innerHTML = songStr;
-			document.getElementById('content').innerHTML = songBlurb;
+			trackDiv.innerHTML = songStr;
+			contentDiv.innerHTML = songBlurb;
 			console.log('NEW SONG ID IS '+songId);
 	  	}
 	  }); 
@@ -92,15 +88,7 @@ function prevSong() {
 function pausePlay() {
 	if(haveTab) {
 		chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
-			if(response.done==true) {
-				if(bg.playState == 'pause') {
-					//pp.src='images/pause.png';
-					pp.className = 'pause';
-				} else {
-					//pp.src='images/play.png';
-					pp.className ='play';
-				}
-			}
+			pp.className = playState;
 		});
 		
 	}
@@ -108,13 +96,7 @@ function pausePlay() {
 function favorite() {
 	if(haveTab) {
 	  chrome.tabs.sendMessage(tabId, {todo: "fav"}, function(response) {
-	  	if(bg.favState == 'fav-on') {
-			//document.getElementById('goFav').src='images/fav-on.png';
-			document.getElementById('goFav').className = 'fav-on';
-		} else {
-			//document.getElementById('goFav').src='images/fav-off.png';
-			document.getElementById('goFav').className = 'fav-off'
-		}
+	  	fav.className = favState;
 	  });
 	}
 }

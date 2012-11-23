@@ -7,7 +7,7 @@
   "browser_action": {
     "default_title": "Mini Hype Machine",
     "default_icon": "images/icon16.png",
-    "default_popup": "hi.html"
+    "default_popup": "pop.html"
   },
   "icons": {
     "16": "images/icon16.png",

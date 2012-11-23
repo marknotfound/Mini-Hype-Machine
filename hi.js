@@ -16,7 +16,6 @@ var prev;
 var pp;
 var fav;
 var banner;
-var songId;
 var trackDiv;
 var contentDiv;
 
@@ -44,59 +43,27 @@ window.onload = function () {
 }
 function nextSong() {
 	if(haveTab) {
-	  chrome.tabs.sendMessage(tabId, {todo: "next"}, function(response) {
-	  	if(response.done==true) {
-			nowPlayingHTML = response.nP;
-			nPArr = nowPlayingHTML.split('>');
-			songBlurb = response.sB;
-			songId = response.sId;
-	  		pp.className = 'pause';
-	  		document.getElementById('goFav').className = response.f;
-	  		artist = nPArr[7].slice(0,-3);
-			track = nPArr[11].slice(0,-3);
-			postURL = nPArr[12].slice(28,-1);
-			songStr = '<a href="'+postURL+'" target="_blank">'+artist+' - '+track+'</a>';
-			songBlurb += ' <a href="'+postURL+'" target="_blank">Read more...</a>';
-			document.getElementById('track').innerHTML = songStr;
-			document.getElementById('content').innerHTML = songBlurb;
-	  	}
-	  });
+	  chrome.tabs.sendMessage(tabId, {todo: "next"});
+		  	fav.className = bg.favState;
+		  	pp.className = bg.playState;
 	}
 }
 function prevSong() {
 	if(haveTab) {
-	  chrome.tabs.sendMessage(tabId, {todo: "prev"}, function(response) {
-	  	if(response.done==true) {
-	  		nowPlayingHTML = response.nP;
-			nPArr = nowPlayingHTML.split('>');
-			songBlurb = response.sB;
-			songId = response.sId;
-	  		pp.className = 'pause';
-	  		fav.className = response.f;
-	  		artist = nPArr[7].slice(0,-3);
-			track = nPArr[11].slice(0,-3);
-			postURL = nPArr[12].slice(28,-1);
-			songStr = '<a href="'+postURL+'" target="_blank">'+artist+' - '+track+'</a>';
-			songBlurb += ' <a href="'+postURL+'" target="_blank">Read more...</a>';
-			trackDiv.innerHTML = songStr;
-			contentDiv.innerHTML = songBlurb;
-			console.log('NEW SONG ID IS '+songId);
-	  	}
-	  }); 
+	  chrome.tabs.sendMessage(tabId, {todo: "prev"});
+	  		pp.className = bg.playState;
 	}
 }
 function pausePlay() {
 	if(haveTab) {
-		chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
-			pp.className = playState;
-		});
-		
+		chrome.tabs.sendMessage(tabId, {todo: "pp"});
+			pp.className = bg.playState;
+			console.log("New playState: "+pp.className);
 	}
 }
 function favorite() {
 	if(haveTab) {
-	  chrome.tabs.sendMessage(tabId, {todo: "fav"}, function(response) {
-	  	fav.className = favState;
-	  });
+	  	chrome.tabs.sendMessage(tabId, {todo: "fav"});
+	  		fav.className = bg.favState;
 	}
 }

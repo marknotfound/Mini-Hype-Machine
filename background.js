@@ -24,6 +24,10 @@ chrome.extension.onMessage.addListener(function(request, sender) {
       case "playUpdate":
         playState = request.ps;
         break;
-        
+      case "updateAll":
+        playState = request.ps;
+        favState = request.fs;
+        songId = request.songId;
+        break;
     }
 });

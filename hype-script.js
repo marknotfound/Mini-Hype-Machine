@@ -22,7 +22,7 @@ var artist;
 var track;
 var readMore;
 
-// Main function.  Hacky! Weee!
+// Main function. Called after 500ms
 function main() {
   // Only run this if we don't already have a Hype Machine tab open.
   if(!haveTab) {

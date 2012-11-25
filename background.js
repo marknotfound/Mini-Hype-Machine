@@ -46,10 +46,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         currentTrack = artist+' - '+track;
         break;
 
-      case "closed": // lol, CASE CLOSED MOTHERFUCKER
-        console.log('Tab closed.  Setting everything back to defaults...');
+      case "closed": // lol, CASE CLOSEDDDDDD
         setDefaults();
-        console.log('Done!');
         break;
     }
 

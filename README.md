@@ -16,5 +16,7 @@ Note:  There are a lot of comments and things that take up a lot of space in the
 ##Websites and Stuff
 
 http://www.dunphtastic.com
+
 http://www.dunphtastic.com/hypemchrome
+
 https://chrome.google.com/webstore/detail/mini-hype-machine/gapbfjblfificgojgkfjdlhcdbifeflb

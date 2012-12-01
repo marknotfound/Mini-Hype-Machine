@@ -61,7 +61,7 @@ function setDefaults() {
   favState = 'fav-off';
   playState = 'play';
   haveTab = false;
-  currentTrack = "<a href='http://www.hypem.com'>No Hype Machine tab found. Open one!</a>";
+  currentTrack = "<a href='http://www.hypem.com' target='_blank'>No Hype Machine tab found. Open one!</a>";
   currentBlurb = "Nothing to see here! <a href='http://www.hypem.com' target='_blank'>Load up a Hype Machine tab!</a>";
   readMore = '';
   songId = '';

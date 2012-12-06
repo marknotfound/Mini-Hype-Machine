@@ -41,7 +41,7 @@ function main() {
     favClasses = favButton.getAttribute("class");
 
     // Set initial load junk
-    playState = playButton.getAttribute("class").split(" ")[1] == "pause" ? "pause" : "play";
+    playState = playButton.getAttribute("class").split(" ")[2] == "pause" ? "pause" : "play";
     favState = favClasses.split(" ")[1];
     songId = favClasses.split(" ")[0].split("_")[2];
 
@@ -65,7 +65,7 @@ function main() {
 
     // Listener to update favState when accessed through the website
     playButton.onclick = function() {
-      playState = playButton.getAttribute("class").split(" ")[1];
+      playState = playButton.getAttribute("class").split(" ")[2];
       chrome.extension.sendMessage({hype: 'playUpdate', ps: playState});
     }
     /*************************************************************************/
@@ -103,7 +103,7 @@ function main() {
 
       // Update some things
       songId = getSongID();
-      playState = playButton.getAttribute("class").split(" ")[1];
+      playState = playButton.getAttribute("class").split(" ")[2];
       playState = playState==undefined ? "play" : playState;
       favState = getFavState();
       songBlurb = findBlurb(songId);

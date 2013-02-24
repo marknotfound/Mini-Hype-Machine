@@ -1,5 +1,5 @@
 ##Mini Hype Machine Chrome Extension
-by Mark Dunphy (@misterdunphy)
+by Mark Dunphy (@dunphtastic)
 
 This extension for Google Chrome allows you to control hypem.com from any tab/window.
 

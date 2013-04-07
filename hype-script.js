@@ -20,7 +20,7 @@ var playButton
   , songBlurb
   , artist
   , track
-  , playlist = []
+  , playlist = {}
   , readMore;
 
 // Main function. Called after 500ms
@@ -60,9 +60,8 @@ function main() {
       playlist[temp].play_button = "play_ctrl_"+temp;
     });
 
-    console.log(playlist);
     // Let background page know the tab loaded.  Send it initial load info.
-    alertBackground(playState, favState, songId);
+    alertBackground(playState, favState, songId, playlist);
     /*************************************************************************/
     /*
     /*   END INITILIZATION STUFF (doesn't initilization look weird with a 'z'?)
@@ -120,7 +119,7 @@ function main() {
       // Update some things
       songId = getSongID();
       playState = playButton.getAttribute("class").split(" ")[2];
-      playState = playState==undefined ? "play" : playState;
+      playState = playState===undefined ? "play" : playState;
       favState = getFavState();
       songBlurb = findBlurb(songId);
       artist = getArtist();
@@ -156,8 +155,9 @@ function main() {
 /*************************************************************************/
 
 //  Alert the background script of the Hypem tab
-function alertBackground(p, f, s) {
-  chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s});
+function alertBackground(p, f, s, playlist) {
+  playlist = JSON.stringify(playlist);
+  chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s, pl: playlist});
 }
 // Returns artist name
 function getArtist() {

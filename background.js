@@ -1,13 +1,14 @@
-var tabid;
-var favState = 'fav-off';
-var playState = 'play';
-var haveTab = false;
-var currentTrack = "<a href='http://www.hypem.com' target='_blank'>No Hype Machine tab found. Open one!</a>";
-var currentBlurb = "Nothing to see here! <a href='http://www.hypem.com' target='_blank'>Load up a Hype Machine tab!</a>";
-var readMore;
-var songId='';
-var artist;
-var track;
+var tabid
+  , favState = 'fav-off'
+  , playState = 'play'
+  , haveTab = false
+  , currentTrack = "<a href='http://www.hypem.com' target='_blank'>No Hype Machine tab found. Open one!</a>"
+  , currentBlurb = "Nothing to see here! <a href='http://www.hypem.com' target='_blank'>Load up a Hype Machine tab!</a>"
+  , readMore
+  , songId=''
+  , artist
+  , playlist
+  , track;
 
 // Listener to get the Hypem tab ID on load and update favState and playState
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
@@ -19,7 +20,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         tabid = sender.tab.id;
         favState = request.fs;
         playState = request.ps;
-        //songId = request.sid;
+        playlist = JSON.parse(request.pl);
         haveTab = true;
         break;
 

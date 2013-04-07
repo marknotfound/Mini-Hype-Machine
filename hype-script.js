@@ -9,18 +9,19 @@ chrome.extension.sendMessage({hype: 'tabCheck'}, function(response) {
 window.onload = setTimeout('main()', 500);
 
 // Initialize some variables
-var playButton;
-var favButton;
-var playState;
-var playNext;
-var playPrev;
-var favState;
-var favClass;
-var songId;
-var songBlurb;
-var artist;
-var track;
-var readMore;
+var playButton
+  , favButton
+  , playState
+  , playNext
+  , playPrev
+  , favState
+  , favClass
+  , songId
+  , songBlurb
+  , artist
+  , track
+  , playlist = []
+  , readMore;
 
 // Main function. Called after 500ms
 function main() {
@@ -45,6 +46,21 @@ function main() {
     favState = favClasses.split(" ")[1];
     songId = favClasses.split(" ")[0].split("_")[2];
 
+    // Get a list of playlist items
+    $('#track-list .section-track').each(function() {
+      $self = $(this);
+      temp = $self.data("itemid");
+      playlist[temp] = {};
+      playlist[temp].track_id = temp;
+      playlist[temp].div_id = "section-track-"+playlist[temp].track_id;
+      playlist[temp].artist = $self.find(".section-player .track_name .artist").text();
+      playlist[temp].track_title = $self.find(".section-player .track_name .track .base-title").text();
+      playlist[temp].share_url = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
+      playlist[temp].share_title = encodeURIComponent(playlist[temp].artist + " - " + playlist[temp].track_title);
+      playlist[temp].play_button = "play_ctrl_"+temp;
+    });
+
+    console.log(playlist);
     // Let background page know the tab loaded.  Send it initial load info.
     alertBackground(playState, favState, songId);
     /*************************************************************************/

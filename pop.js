@@ -16,7 +16,9 @@ var bg = chrome.extension.getBackgroundPage()
   , fav
   , banner
   , trackDiv
-  , contentDiv;
+  , contentDiv
+  , fb_url = ''
+  , tw_url = '';
 
 window.onload = function () {
 	// Some setup stuff...
@@ -27,6 +29,9 @@ window.onload = function () {
 	trackDiv = document.getElementById('track');
 	contentDiv = document.getElementById('the_blurb');
 	$playlist_container = $('#playlist');
+	$share_buy = $('#share_buy');
+	$readmore = $share_buy.find('.read-more');
+
 	
 	// Bind functions to click events
 	next.onclick = nextSong;
@@ -43,6 +48,9 @@ window.onload = function () {
 			fav.className = bg.favState;
 			trackDiv.innerHTML = bg.currentTrack;
 			contentDiv.innerHTML = bg.currentBlurb;
+			console.log(playlist['_'+bg.songId]);
+			setSocialLinks(playlist['_'+bg.songId]);
+			$readmore.attr('href',bg.readMore);
 		});
 
 		// Do playlist items
@@ -50,11 +58,11 @@ window.onload = function () {
 		{
     		
         	$.each(playlist, function(key, hype) {
-        		console.log(hype);
         		if ( hype.track_id )
         		{ // This if-block protects from the magical last element which is not actually a track
+        			var current_status = hype.track_id == bg.songId ? bg.playState : "play"; // If currently playing, show playstate, else play.
                     playlist_html += "<div class='playlist-item "+color_class+"'>";
-                    playlist_html += "<a id='"+hype.play_button+"' class='play' href='#'></a>"+hype.artist+ " - "+hype.track_title;
+                    playlist_html += "<a id='"+hype.play_button+"' class='"+current_status+"' href='#'></a>"+hype.artist+ " - "+hype.track_title;
                     playlist_html += "</div>";
                     color_class = color_class=="white" ? "" : "white";
                 }
@@ -66,8 +74,10 @@ window.onload = function () {
 			// Handle playlist button clicks
 			$playlist_container.find('.playlist-item a')
 			                   .click(function(evt) {
+			                   	    var ele = playlist["_"+evt.target.id.split('_')[2]]; // Pull this object from the playlist array
+			                   	    setSocialLinks(ele);
 			                   	    pausePlayId(evt.target.id);
-			                   	    
+			                   	    $readmore.attr('href', ele.blog_url);			                   	    
 			                    });
         }
 
@@ -116,7 +126,18 @@ function favorite() {
 }
 function pausePlayId(id_selector) {
 	if ( !haveTab ) return false;
+	$playlist_container.find('.playlist-item a').attr('class','play'); // Set all other buttons to play
 	chrome.tabs.sendMessage(tabId, {todo: "click_id", button_id: id_selector}, function(response) {
 		document.getElementById(id_selector).className = bg.playState;
+		pp.className = bg.playState;
+		fav.className = bg.favState;
+		trackDiv.innerHTML = bg.currentTrack;
+		contentDiv.innerHTML = bg.currentBlurb;
 	});
+}
+function setSocialLinks(ele) {
+	fb_url = "http://www.facebook.com/sharer.php?u="+ele.share_url+"&t="+ele.share_title;
+    tw_url = "https://twitter.com/share?url="+ele.share_url+"&text="+ele.share_text;
+    $share_buy.find('.facebook').attr('href', fb_url);
+    $share_buy.find('.twitter').attr('href', tw_url);
 }

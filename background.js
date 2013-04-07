@@ -38,8 +38,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         favState = request.fs;
         // Blurb: Don't update it if the songID hasn't changed.  This holds the blurb regardless of what page the user is on.
         readMore = request.rm;
-        readMore = "<a href='"+readMore+"' target='_blank'> Read Post »</a>";
-        currentBlurb = songId==request.sid ? currentBlurb : request.sb+' '+readMore;
+        currentBlurb = songId==request.sid ? currentBlurb : request.sb;
         // Track information
         songId = request.sid;
         artist = request.a;

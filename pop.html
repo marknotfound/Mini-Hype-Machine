@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Unofficial Hypem Extension</title>
+    <meta charset='utf-8'>
+    <title>Mini Hype Machine</title>
     
     <style>
     html, body {
@@ -26,6 +27,10 @@
       margin-top: -1px;
       height: 33px;
       padding-top: 2px;
+    }
+    #playlist {
+      max-height: 190px;
+      overflow-y: scroll;
     }
     #logo {
       float: left;
@@ -218,11 +223,10 @@
       Nothing to see here! <a href='http://www.hypem.com/' target='_blank'>Load up a Hype Machine tab!</a>
       </div>
       <div id='share_buy'>
-        <a class='read-more'>Read More</a>
-        <a class='facebook' href='#'></a>
-        <a class='twitter' href='#'></a>
-        <a class='amazon' href='#'></a>
-        <a class='itunes' href='#'></a>
+        <a class='read-more' target='_blank'>Read Post »</a>
+        <a class='facebook' href='#' target='_blank'></a>
+        <a class='twitter' href='#' target='_blank'></a>
+        <a class='amazon' href='#' target='_blank'></a>
       </div>
       <!-- Begin playlist items -->
       <div id='playlist'></div>

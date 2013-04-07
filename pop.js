@@ -60,7 +60,15 @@ window.onload = function () {
                 }
 			});
 
+        	// Append to the playlist container
 			$playlist_container.html(playlist_html);
+
+			// Handle playlist button clicks
+			$playlist_container.find('.playlist-item a')
+			                   .click(function(evt) {
+			                   	    pausePlayId(evt.target.id);
+			                   	    
+			                    });
         }
 
 	} 
@@ -76,36 +84,39 @@ window.onload = function () {
 	
 }
 function nextSong() {
-	if(haveTab) {
-	  chrome.tabs.sendMessage(tabId, {todo: "next"}, function(response) {
-	  		fav.className = bg.favState;
-		  	pp.className = bg.playState;
-		  	trackDiv.innerHTML = bg.currentTrack;
-		  	contentDiv.innerHTML = bg.currentBlurb;
-	  });
-	}
+	if ( !haveTab ) return false;
+	chrome.tabs.sendMessage(tabId, {todo: "next"}, function(response) {
+		fav.className = bg.favState;
+	  	pp.className = bg.playState;
+	  	trackDiv.innerHTML = bg.currentTrack;
+	  	contentDiv.innerHTML = bg.currentBlurb;
+	});
+	
 }
 function prevSong() {
-	if(haveTab) {
-	  chrome.tabs.sendMessage(tabId, {todo: "prev"}, function(response) {
-	  		fav.className = bg.favState;
-	  		pp.className = bg.playState;
-	  		trackDiv.innerHTML = bg.currentTrack;
-		  	contentDiv.innerHTML = bg.currentBlurb;
-	  });
-	}
+	if ( !haveTab ) return false;
+	chrome.tabs.sendMessage(tabId, {todo: "prev"}, function(response) {
+		fav.className = bg.favState;
+		pp.className = bg.playState;
+		trackDiv.innerHTML = bg.currentTrack;
+	  	contentDiv.innerHTML = bg.currentBlurb;
+	});
 }
 function pausePlay() {
-	if(haveTab) {
-		chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
-			pp.className = bg.playState;
-		});
-	}
+	if ( !haveTab ) return false;
+	chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
+		pp.className = bg.playState;
+	});
 }
 function favorite() {
-	if(haveTab) {
-	  	chrome.tabs.sendMessage(tabId, {todo: "fav"}, function(response) {
-	  		fav.className = bg.favState;
-	  	});
-	}
+	if ( !haveTab ) return false;
+	chrome.tabs.sendMessage(tabId, {todo: "fav"}, function(response) {
+		fav.className = bg.favState;
+	});
+}
+function pausePlayId(id_selector) {
+	if ( !haveTab ) return false;
+	chrome.tabs.sendMessage(tabId, {todo: "click_id", button_id: id_selector}, function(response) {
+		document.getElementById(id_selector).className = bg.playState;
+	});
 }

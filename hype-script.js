@@ -117,6 +117,11 @@ function main() {
         case "update":
           // Run on each popup load. Just blank to refresh information.
           break;
+
+        case "click_id":
+          console.log(request);
+          document.getElementById(request.button_id).click();
+          break;
       }
 
       // Update some things

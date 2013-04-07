@@ -18,7 +18,8 @@ var bg = chrome.extension.getBackgroundPage()
   , trackDiv
   , contentDiv
   , fb_url = ''
-  , tw_url = '';
+  , tw_url = ''
+  , amazon_url = '';
 
 window.onload = function () {
 	// Some setup stuff...
@@ -50,6 +51,7 @@ window.onload = function () {
 			contentDiv.innerHTML = bg.currentBlurb;
 			console.log(playlist['_'+bg.songId]);
 			setSocialLinks(playlist['_'+bg.songId]);
+			setAmazonLink(playlist['_'+bg.songId]);
 			$readmore.attr('href',bg.readMore);
 		});
 
@@ -140,4 +142,8 @@ function setSocialLinks(ele) {
     tw_url = "https://twitter.com/share?url="+ele.share_url+"&text="+ele.share_text;
     $share_buy.find('.facebook').attr('href', fb_url);
     $share_buy.find('.twitter').attr('href', tw_url);
+}
+function setAmazonLink(ele) {
+    amazon_url = ele.amazon;
+    $share_buy.find('.amazon').attr('href', amazon_url);
 }

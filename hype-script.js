@@ -62,6 +62,7 @@ function main() {
       playlist['_'+temp].share_url = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
       playlist['_'+temp].share_title = encodeURIComponent(playlist['_'+temp].artist + " - " + playlist['_'+temp].track_title);
       playlist['_'+temp].share_text = encodeURIComponent("I'm listening to "+playlist['_'+temp].track_title+" by "+playlist['_'+temp].artist+" on @hypem via Mini Hype Machine!");
+      playlist['_'+temp].amazon = "http://hypem.com/go/amazon_mp3_search/"+playlist['_'+temp].artist.replace(/ /gi,'+');
       playlist['_'+temp].play_button = "play_ctrl_"+temp;
     }
   });

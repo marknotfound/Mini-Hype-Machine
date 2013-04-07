@@ -78,6 +78,7 @@ window.onload = function () {
 			                   .click(function(evt) {
 			                   	    var ele = playlist["_"+evt.target.id.split('_')[2]]; // Pull this object from the playlist array
 			                   	    setSocialLinks(ele);
+			                   	    setAmazonLink(ele);
 			                   	    pausePlayId(evt.target.id);
 			                   	    $readmore.attr('href', ele.blog_url);			                   	    
 			                    });
@@ -116,8 +117,10 @@ function prevSong() {
 }
 function pausePlay() {
 	if ( !haveTab ) return false;
+	
 	chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
 		pp.className = bg.playState;
+		updatePlaylistButtons(bg.songId);
 	});
 }
 function favorite() {
@@ -146,4 +149,8 @@ function setSocialLinks(ele) {
 function setAmazonLink(ele) {
     amazon_url = ele.amazon;
     $share_buy.find('.amazon').attr('href', amazon_url);
+}
+function updatePlaylistButtons(songId) {
+	$("#playlist").find("a").attr('class','play');
+    $("#play_ctrl_"+bg.songId).attr('class',bg.playState);
 }

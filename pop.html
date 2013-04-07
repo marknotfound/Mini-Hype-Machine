@@ -7,7 +7,8 @@
     html, body {
       background-color: #F3F3F3;
       padding: 0px;
-      width: 400px;
+      min-width: 400px;
+      max-width:600px;
       margin: 0 auto;
       text-align: center;
       font-family: 'Helvetica','Arial',sans-serif;
@@ -50,7 +51,6 @@
       font-size: 14px;
     }
     #content {
-      padding: 5px 0px 5px 5px;
       font-size: 14px;
       font-weight: normal;
       color: #555;
@@ -65,6 +65,9 @@
     #content a:hover {
       color: #0063DC;
       text-decoration: underline;
+    }
+    #the_blurb {
+      padding: 5px 8px;
     }
     a {
       outline: none;
@@ -114,7 +117,7 @@
     .pause {
       background-position: -32px 0px;
     }
-    .play:hover {
+    .play:hover, .playlist-item a:hover {
       background-position: 0px -32px;
     }
     .pause:hover {
@@ -132,18 +135,77 @@
       background: url(images/icon-fav-player.png) no-repeat;
       background-position: 0 -32px;
     }
+    .playlist-item {
+      padding: 5px 0px;
+      clear: both;
+      width: auto;
+      overflow:hidden;
+      line-height:19px;
+      height: 17px;
+    }
+    .playlist-item a.play {
+      background-position: 0px -58px;
+    }
+    .playlist-item a.play:hover {
+      background-position: 0px -31px;
+    }
+    .playlist-item a.pause {
+      background-position: -20px -58px;
+    }
+    .playlist-item a.pause:hover {
+      background-position: -20px -32px;
+    }
+    .playlist-item a, .playlist-item a:hover {
+      float: left;
+      display: block;
+      width: 25px;
+      height: 20px;
+      background-size: 96px 80px;
+    }
+    #share_buy {
+      padding:5px 8px;
+      clear:both;
+      background-color:#fff;
+      font-size:12px;
+      height:15px;
+    }
+    #share_buy a {
+      float:right;
+      width: 15px;
+      height: 15px;
+      margin: 0px 1px;
+    }
+    #share_buy a.read-more {
+      float:left;
+      width:auto;
+      margin:0px;
+    }
+    #share_buy a.facebook {
+      background: url('images/facebook.png') no-repeat 0px 0px;
+      background-size:15px;
+    }
+    #share_buy a.twitter {
+      background: url('images/twitter.png') no-repeat 0px 0px;
+      background-size:15px;
+    }
+    #share_buy a.amazon {
+      background: url('images/amazon.png') no-repeat 0px 0px;
+      background-size:15px;
+    }
+    .white {
+      background-color: #fff;
+    }
     </style>
+    <script type='text/javascript' src='jquery-1.9.1.min.js'></script>
     <script type='text/javascript' src='pop.js'></script>
-
-
   </head>
   <body>
     <div id='controlsDiv'>
       <a href='http://www.hypem.com/' target='_blank' id='logo'></a>
       <div id='controls'>
         <a id='goPrev' href='#'></a>
-        <a id='goPlay' href='#' class='play'></a>
-        <a id='goFav' href='#' class='fav-off'></a>
+        <a id='goPlay' class='play' href='#'></a>
+        <a id='goFav' class='fav-off' href='#'></a>
         <a id='goNext' href='#'></a>
       </div>
     </div>
@@ -151,7 +213,18 @@
       <a href='http://www.hypem.com/' target='_blank'>No Hype Machine tab found. Open one!</a>
     </div>
     <div id='content'>
-    Nothing to see here! <a href='http://www.hypem.com/' target='_blank'>Load up a Hype Machine tab!</a>
+      <div id='the_blurb'>
+      Nothing to see here! <a href='http://www.hypem.com/' target='_blank'>Load up a Hype Machine tab!</a>
+      </div>
+      <div id='share_buy'>
+        <a class='read-more'>Read More</a>
+        <a class='facebook' href='#'></a>
+        <a class='twitter' href='#'></a>
+        <a class='amazon' href='#'></a>
+        <a class='itunes' href='#'></a>
+      </div>
+      <!-- Begin playlist items -->
+      
     </div>
   </body>
 </html>

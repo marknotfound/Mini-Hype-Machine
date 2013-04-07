@@ -1,19 +1,22 @@
-var bg = chrome.extension.getBackgroundPage();
-var tabId = bg.tabid;
-var favState = bg.favState;
-var playState = bg.playState;
-var haveTab = bg.haveTab;
-var banner;
-var artist;
-var track;
-var postURL;
-var next;
-var prev;
-var pp;
-var fav;
-var banner;
-var trackDiv;
-var contentDiv;
+var bg = chrome.extension.getBackgroundPage()
+  , tabId = bg.tabid
+  , favState = bg.favState
+  , playState = bg.playState
+  , haveTab = bg.haveTab
+  , playlist = bg.playlist
+  , playlist_html = ''
+  , color_class = ''
+  , banner
+  , artist
+  , track
+  , postURL
+  , next
+  , prev
+  , pp
+  , fav
+  , banner
+  , trackDiv
+  , contentDiv;
 
 window.onload = function () {
 	// Some setup stuff...
@@ -22,8 +25,9 @@ window.onload = function () {
 	pp = document.getElementById('goPlay');
 	fav = document.getElementById('goFav');
 	trackDiv = document.getElementById('track');
-	contentDiv = document.getElementById('content');
-
+	contentDiv = document.getElementById('the_blurb');
+	$playlist_container = $('#playlist');
+	
 	// Bind functions to click events
 	next.onclick = nextSong;
 	prev.onclick = prevSong;
@@ -32,14 +36,36 @@ window.onload = function () {
 
 	// Set up the buttons
 	// Update all controls.
-	if(haveTab) {
+	if ( haveTab )
+	{
 		chrome.tabs.sendMessage(tabId, {todo: "update"}, function(response) {
 			pp.className = bg.playState;
 			fav.className = bg.favState;
 			trackDiv.innerHTML = bg.currentTrack;
 			contentDiv.innerHTML = bg.currentBlurb;
 		});
-	} else {
+
+		// Do playlist items
+		if ( playlist ) 
+		{
+    		
+        	$.each(playlist, function(key, hype) {
+        		console.log(hype);
+        		if ( hype.track_id )
+        		{ // This if-block protects from the magical last element which is not actually a track
+                    playlist_html += "<div class='playlist-item "+color_class+"'>";
+                    playlist_html += "<a id='"+hype.play_button+"' class='play' href='#'></a>"+hype.artist+ " - "+hype.track_title;
+                    playlist_html += "</div>";
+                    color_class = color_class=="white" ? "" : "white";
+                }
+			});
+
+			$playlist_container.html(playlist_html);
+        }
+
+	} 
+	else 
+	{
 		// Just set stuff to the background page values and don't try to send a message.
 		pp.className = bg.playState;
 		fav.className = bg.favState;

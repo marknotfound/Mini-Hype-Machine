@@ -50,14 +50,17 @@ function main() {
     $('#track-list .section-track').each(function() {
       $self = $(this);
       temp = $self.data("itemid");
-      playlist[temp] = {};
-      playlist[temp].track_id = temp;
-      playlist[temp].div_id = "section-track-"+playlist[temp].track_id;
-      playlist[temp].artist = $self.find(".section-player .track_name .artist").text();
-      playlist[temp].track_title = $self.find(".section-player .track_name .track .base-title").text();
-      playlist[temp].share_url = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
-      playlist[temp].share_title = encodeURIComponent(playlist[temp].artist + " - " + playlist[temp].track_title);
-      playlist[temp].play_button = "play_ctrl_"+temp;
+      if ( temp !== undefined )
+      {
+        playlist[temp] = {};
+        playlist[temp].track_id = temp;
+        playlist[temp].div_id = "section-track-"+playlist[temp].track_id;
+        playlist[temp].artist = $self.find(".section-player .track_name .artist").text();
+        playlist[temp].track_title = $self.find(".section-player .track_name .track .base-title").text();
+        playlist[temp].share_url = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
+        playlist[temp].share_title = encodeURIComponent(playlist[temp].artist + " - " + playlist[temp].track_title);
+        playlist[temp].play_button = "play_ctrl_"+temp;
+      }
     });
 
     // Let background page know the tab loaded.  Send it initial load info.

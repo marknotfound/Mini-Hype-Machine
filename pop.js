@@ -45,44 +45,47 @@ window.onload = function () {
 	if ( haveTab )
 	{
 		chrome.tabs.sendMessage(tabId, {todo: "update"}, function(response) {
-			pp.className = bg.playState;
-			fav.className = bg.favState;
-			trackDiv.innerHTML = bg.currentTrack;
+			playlist             = bg.playlist;
+			pp.className         = bg.playState;
+			fav.className        = bg.favState;
+			trackDiv.innerHTML   = bg.currentTrack;
 			contentDiv.innerHTML = bg.currentBlurb;
-			console.log(playlist['_'+bg.songId]);
-			setSocialLinks(playlist['_'+bg.songId]);
-			setAmazonLink(playlist['_'+bg.songId]);
+			setSocialLinks(bg.nowplaying);
+			setAmazonLink(bg.nowplaying);
 			$readmore.attr('href',bg.readMore);
+
+			// TODO: Move the playlist update stuff into a function
+			// Do playlist items
+			if ( playlist ) 
+			{
+	    		
+	        	$.each(playlist, function(key, hype) {
+	        		if ( hype.track_id )
+	        		{ // This if-block protects from the magical last element which is not actually a track
+	        			var current_status = hype.track_id == bg.songId ? bg.playState : "play"; // If currently playing, show playstate, else play.
+	                    playlist_html += "<div class='playlist-item "+color_class+"'>";
+	                    playlist_html += "<a id='"+hype.play_button+"' class='"+current_status+"' href='#'></a>"+hype.artist+ " - "+hype.track_title;
+	                    playlist_html += "</div>";
+	                    color_class = color_class=="white" ? "" : "white";
+	                }
+				});
+
+	        	// Append to the playlist container
+				$playlist_container.html(playlist_html);
+
+				// Handle playlist button clicks
+				$playlist_container.find('.playlist-item a')
+				                   .click(function(evt) {
+				                   	    var ele = playlist["_"+evt.target.id.split('_')[2]]; // Pull this object from the playlist array
+				                   	    setSocialLinks(ele);
+				                   	    setAmazonLink(ele);
+				                   	    pausePlayId(evt.target.id);
+				                   	    $readmore.attr('href', ele.blog_url);			                   	    
+				                    });
+	        } // End playlist stuff if
 		});
 
-		// Do playlist items
-		if ( playlist ) 
-		{
-    		
-        	$.each(playlist, function(key, hype) {
-        		if ( hype.track_id )
-        		{ // This if-block protects from the magical last element which is not actually a track
-        			var current_status = hype.track_id == bg.songId ? bg.playState : "play"; // If currently playing, show playstate, else play.
-                    playlist_html += "<div class='playlist-item "+color_class+"'>";
-                    playlist_html += "<a id='"+hype.play_button+"' class='"+current_status+"' href='#'></a>"+hype.artist+ " - "+hype.track_title;
-                    playlist_html += "</div>";
-                    color_class = color_class=="white" ? "" : "white";
-                }
-			});
-
-        	// Append to the playlist container
-			$playlist_container.html(playlist_html);
-
-			// Handle playlist button clicks
-			$playlist_container.find('.playlist-item a')
-			                   .click(function(evt) {
-			                   	    var ele = playlist["_"+evt.target.id.split('_')[2]]; // Pull this object from the playlist array
-			                   	    setSocialLinks(ele);
-			                   	    setAmazonLink(ele);
-			                   	    pausePlayId(evt.target.id);
-			                   	    $readmore.attr('href', ele.blog_url);			                   	    
-			                    });
-        }
+		
 
 	} 
 	else 

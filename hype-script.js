@@ -21,51 +21,32 @@ var playButton
   , artist
   , track
   , playlist = {}
+  , nowplaying = {}
   , readMore;
 
 // Main function. Called after 500ms
 function main() {
   // Only run this if we don't already have a Hype Machine tab open.
-  if ( haveTab) return false; // Know what's cooler than wrapping a whole function in an if? Not wrapping a whole function in an if.
+  if ( haveTab) return false; // Know what's cooler than wrapping a whole function in an if-block? Not wrapping a whole function in an if-block.
   /*************************************************************************/
   /*
   /*   BEGIN INITIALIZATION STUFF. SAY HELLO TO THE BACKGROUND SCRIPT!
   /*
   /*************************************************************************/
   // Cache control elements
-  favButton = document.getElementById("playerFav");
+  favButton  = document.getElementById("playerFav");
   playButton = document.getElementById("playerPlay");
-  playNext = document.getElementById("playerNext");
-  playPrev = document.getElementById("playerPrev");
+  playNext   = document.getElementById("playerNext");
+  playPrev   = document.getElementById("playerPrev");
 
   // Get classes on the favorite button 
   favClasses = favButton.getAttribute("class");
 
   // Set initial load junk
-  playState = playButton.getAttribute("class").split(" ")[2] == "pause" ? "pause" : "play";
-  favState = favClasses.split(" ")[1];
-  songId = favClasses.split(" ")[0].split("_")[2];
-
-  // Get a list of playlist items
-  $('#track-list .section-track').each(function() {
-    $self = $(this);
-    temp = $self.data("itemid");
-    if ( temp !== undefined )
-    {
-      playlist['_'+temp] = {};
-      playlist['_'+temp].track_id = temp;
-      playlist['_'+temp].blurb = findBlurb(temp);
-      playlist['_'+temp].blog_url = $self.find('.readpost').attr('href');
-      playlist['_'+temp].div_id = "section-track-"+playlist['_'+temp].track_id;
-      playlist['_'+temp].artist = $self.find(".section-player .track_name .artist").text();
-      playlist['_'+temp].track_title = $self.find(".section-player .track_name .track .base-title").text();
-      playlist['_'+temp].share_url = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
-      playlist['_'+temp].share_title = encodeURIComponent(playlist['_'+temp].artist + " - " + playlist['_'+temp].track_title);
-      playlist['_'+temp].share_text = encodeURIComponent("I'm listening to "+playlist['_'+temp].track_title+" by "+playlist['_'+temp].artist+" on @hypem via Mini Hype Machine!");
-      playlist['_'+temp].amazon = "http://hypem.com/go/amazon_mp3_search/"+playlist['_'+temp].artist.replace(/ /gi,'+');
-      playlist['_'+temp].play_button = "play_ctrl_"+temp;
-    }
-  });
+  playState  = playButton.getAttribute("class").split(" ")[2] == "pause" ? "pause" : "play";
+  favState   = $('#playerFav').hasClass("fav-on") ? "fav-on" : "fav-off";
+  songId     = favClasses.split(" ")[0].split("_")[2];
+  playlist   = getPlaylistItems();
 
   // Let background page know the tab loaded.  Send it initial load info.
   alertBackground(playState, favState, songId, playlist);
@@ -97,7 +78,7 @@ function main() {
   /*************************************************************************/
   /*************************************************************************/
   /*
-  /*   HANDLE INCOMING MESSAGES FROM HI.JS
+  /*   HANDLE INCOMING MESSAGES FROM MAIN POPUP
   /*
   /*************************************************************************/
   chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
@@ -123,23 +104,39 @@ function main() {
         break;
 
       case "click_id":
-        console.log(request);
         document.getElementById(request.button_id).click();
         break;
     }
 
     // Update some things
-    songId = getSongID();
+    songId    = getSongID();
     playState = playButton.getAttribute("class").split(" ")[2];
-    playState = playState===undefined ? "play" : playState;
-    favState = getFavState();
+    playState = playState === undefined ? "play" : playState;
+    favState  = getFavState();
     songBlurb = findBlurb(songId);
-    artist = getArtist();
-    track = getTrackTitle();
-    readMore = getPost();
+    artist    = getArtist();
+    track     = getTrackTitle();
+    readMore  = getPost();
+    playlist  = {};
+    playlist  = getPlaylistItems();
+
+    nowplaying.share_url    = encodeURIComponent("http://www.hypem.com/track/"+songId);
+    nowplaying.share_title  = encodeURIComponent(artist + " - " + track);
+    nowplaying.share_text   = encodeURIComponent("I'm listening to "+track+" by "+artist+" on @hypem via Mini Hype Machine!");
+    nowplaying.amazon       = "http://hypem.com/go/amazon_mp3_search/"+artist.replace(/ /gi,'+');
+    nowplaying              = JSON.stringify(nowplaying);
     
     // Update background.js
-    chrome.extension.sendMessage({hype: 'updateAll', ps: playState, fs: favState, sid: songId, sb: songBlurb, a: artist, t: track, rm: readMore}, function(response) {
+    chrome.extension.sendMessage({hype: 'updateAll',
+                                  ps:    playState,
+                                  fs:    favState,
+                                  sid:   songId,
+                                  sb:    songBlurb,
+                                  a:     artist,
+                                  t:     track,
+                                  rm:    readMore,
+                                  pl:    playlist,
+                                  np:    nowplaying}, function(response) {
       // Do nothing. Just making sure we wait for it to complete before sending the response.
     });
 
@@ -167,7 +164,6 @@ function main() {
 
 //  Alert the background script of the Hypem tab
 function alertBackground(p, f, s, playlist) {
-  playlist = JSON.stringify(playlist); // Super fucking important, leave it.
   chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s, pl: playlist});
 }
 // Returns artist name
@@ -180,7 +176,8 @@ function getTrackTitle() {
 }
 // Returns post URL wrapping 'Read More'.  HTML.
 function getPost() {
-  return document.getElementById('player-nowplaying').childNodes[4].getAttribute('href');
+  return $('#payer-nowplaying').find('.read').attr('href');
+  //return document.getElementById('player-nowplaying').childNodes[4].getAttribute('href');
 }
 // Returns song ID 
 function getSongID() {
@@ -205,4 +202,30 @@ function findBlurb(songID) {
 
 function getBlogUrl(songID) {
     return $('#section-track-'+songID).find('.readpost').attr('href');
+}
+
+
+function getPlaylistItems() {
+  // Get a list of playlist items
+  $('#track-list .section-track').each(function() {
+    $self    = $(this);
+    var temp = $self.data("itemid");
+    if ( temp !== undefined )
+    {
+      playlist['_'+temp]              = {};
+      playlist['_'+temp].track_id     = temp;
+      playlist['_'+temp].blurb        = findBlurb(temp);
+      playlist['_'+temp].blog_url     = $self.find('.readpost').attr('href');
+      playlist['_'+temp].div_id       = "section-track-"+playlist['_'+temp].track_id;
+      playlist['_'+temp].artist       = $self.find(".section-player .track_name .artist").text();
+      playlist['_'+temp].track_title  = $self.find(".section-player .track_name .track .base-title").text();
+      playlist['_'+temp].share_url    = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
+      playlist['_'+temp].share_title  = encodeURIComponent(playlist['_'+temp].artist + " - " + playlist['_'+temp].track_title);
+      playlist['_'+temp].share_text   = encodeURIComponent("I'm listening to "+playlist['_'+temp].track_title+" by "+playlist['_'+temp].artist+" on @hypem via Mini Hype Machine!");
+      playlist['_'+temp].amazon       = "http://hypem.com/go/amazon_mp3_search/"+playlist['_'+temp].artist.replace(/ /gi,'+');
+      playlist['_'+temp].play_button  = "play_ctrl_"+temp;
+    }
+  });
+
+  return JSON.stringify(playlist);
 }

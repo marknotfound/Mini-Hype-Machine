@@ -5,23 +5,24 @@ var tabid
   , currentTrack = "<a href='http://www.hypem.com' target='_blank'>No Hype Machine tab found. Open one!</a>"
   , currentBlurb = "Nothing to see here! <a href='http://www.hypem.com' target='_blank'>Load up a Hype Machine tab!</a>"
   , readMore
-  , songId=''
+  , songId = ''
   , artist
   , playlist
   , track;
 
 // Listener to get the Hypem tab ID on load and update favState and playState
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+
     switch(request.hype) {
       case "tabCheck": // Checks if there's already a tab open.
             // Do nothing.
           break;
       case "loaded": // Tab loaded.  Set everything up.
-        tabid = sender.tab.id;
-        favState = request.fs;
+        tabid     = sender.tab.id;
+        favState  = request.fs;
         playState = request.ps;
-        playlist = JSON.parse(request.pl);
-        haveTab = true;
+        playlist  = JSON.parse(request.pl);
+        haveTab   = true;
         break;
 
       case "favUpdate":
@@ -34,15 +35,15 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
       case "updateAll":
         // Button states
-        playState = request.ps;
-        favState = request.fs;
-        // Blurb: Don't update it if the songID hasn't changed.  This holds the blurb regardless of what page the user is on.
-        readMore = request.rm;
-        currentBlurb = songId==request.sid ? currentBlurb : request.sb;
-        // Track information
-        songId = request.sid;
-        artist = request.a;
-        track = request.t;
+        playState    = request.ps;
+        favState     = request.fs;
+        readMore     = request.rm;
+        currentBlurb = songId == request.sid ? currentBlurb : request.sb;
+        songId       = request.sid;
+        artist       = request.a;
+        track        = request.t;
+        playlist     = JSON.parse(request.pl);
+        nowplaying   = JSON.parse(request.np);
         currentTrack = artist+' - '+track;
         break;
 
@@ -57,14 +58,14 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 // Just set up defaults when a tab closes.
 // Every time a tab closes, a developer gets his wings.
 function setDefaults() {
-  tabid = '';
-  favState = 'fav-off';
-  playState = 'play';
-  haveTab = false;
+  tabid        = '';
+  favState     = 'fav-off';
+  playState    = 'play';
+  haveTab      = false;
   currentTrack = "<a href='http://www.hypem.com' target='_blank'>No Hype Machine tab found. Open one!</a>";
   currentBlurb = "Nothing to see here! <a href='http://www.hypem.com' target='_blank'>Load up a Hype Machine tab!</a>";
-  readMore = '';
-  songId = '';
-  artist = '';
-  track = '';
+  readMore     = '';
+  songId       = '';
+  artist       = '';
+  track        = '';
 }

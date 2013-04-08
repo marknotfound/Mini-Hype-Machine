@@ -144,6 +144,7 @@ function pausePlayId(id_selector) {
 	});
 }
 function setSocialLinks(ele) {
+	console.log(ele.share_text);
 	fb_url = "http://www.facebook.com/sharer.php?u="+ele.share_url+"&t="+ele.share_title;
     tw_url = "https://twitter.com/share?url="+ele.share_url+"&text="+ele.share_text;
     $share_buy.find('.facebook').attr('href', fb_url);

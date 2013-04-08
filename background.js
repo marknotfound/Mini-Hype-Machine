@@ -8,6 +8,7 @@ var tabid
   , songId = ''
   , artist
   , playlist
+  , nowplaying
   , track;
 
 // Listener to get the Hypem tab ID on load and update favState and playState

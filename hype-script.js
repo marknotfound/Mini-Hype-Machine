@@ -119,6 +119,7 @@ function main() {
     readMore  = getPost();
     playlist  = {};
     playlist  = getPlaylistItems();
+    console.log(readMore);
 
     nowplaying.share_url    = encodeURIComponent("http://www.hypem.com/track/"+songId);
     nowplaying.share_title  = encodeURIComponent(artist + " - " + track);
@@ -176,7 +177,7 @@ function getTrackTitle() {
 }
 // Returns post URL wrapping 'Read More'.  HTML.
 function getPost() {
-  return $('#payer-nowplaying').find('.read').attr('href');
+  return $('#player-nowplaying').find('.read').attr('href');
   //return document.getElementById('player-nowplaying').childNodes[4].getAttribute('href');
 }
 // Returns song ID 

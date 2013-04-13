@@ -66,7 +66,12 @@ function main() {
   /*************************************************************************/
   // Listener to update favState when accessed through the website
   favButton.onclick = function() {
-    favState = favClasses.split(" ")[1];
+    try {
+      favState = favClasses.split(" ")[1];
+    } catch(e) {
+      favState = 'fav-off';
+    }
+
     chrome.extension.sendMessage({hype: 'favUpdate', fs: favState});
   }
 
@@ -230,7 +235,9 @@ function getPlaylistItems() {
       playlist['_'+temp].blog_url     = $self.find('.readpost').attr('href');
       playlist['_'+temp].div_id       = "section-track-"+playlist['_'+temp].track_id;
       playlist['_'+temp].artist       = $self.find(".section-player .track_name .artist").text();
+      playlist['_'+temp].artist       = "<a class='track' href='http://www.hypem.com/artist/"+playlist['_'+temp].artist+"/' target='_blank'>"+playlist['_'+temp].artist+"</a>";
       playlist['_'+temp].track_title  = $self.find(".section-player .track_name .track .base-title").text();
+      playlist['_'+temp].track_title  = "<a class='track' href='http://www.hypem.com/track/"+temp+"/' target='_blank'>"+playlist['_'+temp].track_title+"</a>";
       playlist['_'+temp].share_url    = encodeURIComponent("http://www.hypem.com"+$self.find(".section-player .track_name .track").attr('href'));
       playlist['_'+temp].share_title  = encodeURIComponent(playlist['_'+temp].artist + " - " + playlist['_'+temp].track_title);
       playlist['_'+temp].share_text   = encodeURIComponent("I'm listening to "+playlist['_'+temp].track_title+" by "+playlist['_'+temp].artist+" on @hypem via Mini Hype Machine!");

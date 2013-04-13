@@ -41,8 +41,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         readMore     = request.rm;
         currentBlurb = songId == request.sid ? currentBlurb : request.sb;
         songId       = request.sid;
-        artist       = request.a;
-        track        = request.t;
+        artist       = "<a href='http://www.hypem.com/artist/"+request.a+"/' target='_blank'>"+request.a+"</a>";
+        track        = "<a href='http://www.hypem.com/track/"+songId+"/' target='_blank'>"+request.t+"</a>";
         playlist     = JSON.parse(request.pl);
         nowplaying   = JSON.parse(request.np);
         currentTrack = artist+' - '+track;

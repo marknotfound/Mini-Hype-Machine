@@ -39,13 +39,17 @@ function main() {
   playNext   = document.getElementById("playerNext");
   playPrev   = document.getElementById("playerPrev");
 
-  // Get classes on the favorite button 
+  // Get classes on the favorite button
   favClasses = favButton.getAttribute("class");
 
   // Set initial load junk
   playState  = playButton.getAttribute("class").split(" ")[2] == "pause" ? "pause" : "play";
-  favState   = $('#playerFav').hasClass("fav-on") ? "fav-on" : "fav-off";
-  songId     = favClasses.split(" ")[0].split("_")[2];
+  try {
+      favState   = $('#playerFav').hasClass("fav-on") ? "fav-on" : "fav-off";
+  } catch(e) {
+    favState = "fav-off";
+  }
+  songId     = $("#player-nowplaying").children('a')[1].getAttribute('href').split('/')[2];
   playlist   = getPlaylistItems();
 
   // Let background page know the tab loaded.  Send it initial load info.
@@ -109,24 +113,24 @@ function main() {
     }
 
     // Update some things
-    songId    = getSongID();
-    playState = playButton.getAttribute("class").split(" ")[2];
-    playState = playState === undefined ? "play" : playState;
-    favState  = getFavState();
-    songBlurb = findBlurb(songId);
-    artist    = getArtist();
-    track     = getTrackTitle();
-    readMore  = getPost();
-    playlist  = {};
-    playlist  = getPlaylistItems();
-    console.log(readMore);
+    songId     = getSongID();
+    playState  = playButton.getAttribute("class").split(" ")[2];
+    playState  = playState === undefined ? "play" : playState;
+    favState   = getFavState();
+    songBlurb  = findBlurb(songId);
+    artist     = getArtist();
+    track      = getTrackTitle();
+    readMore   = getPost();
+    playlist   = {};
+    playlist   = getPlaylistItems();
 
+    nowplaying = {};
     nowplaying.share_url    = encodeURIComponent("http://www.hypem.com/track/"+songId);
     nowplaying.share_title  = encodeURIComponent(artist + " - " + track);
-    nowplaying.share_text   = encodeURIComponent("I'm listening to "+track+" by "+artist+" on @hypem via Mini Hype Machine!");
+    nowplaying.share_text   = encodeURIComponent("I'm listening to "+track+" by "+artist+" on @hypem via Mini Hype Machine! bit.ly/Z5xcGw");
     nowplaying.amazon       = "http://hypem.com/go/amazon_mp3_search/"+artist.replace(/ /gi,'+');
     nowplaying              = JSON.stringify(nowplaying);
-    
+
     // Update background.js
     chrome.extension.sendMessage({hype: 'updateAll',
                                   ps:    playState,
@@ -137,9 +141,7 @@ function main() {
                                   t:     track,
                                   rm:    readMore,
                                   pl:    playlist,
-                                  np:    nowplaying}, function(response) {
-      // Do nothing. Just making sure we wait for it to complete before sending the response.
-    });
+                                  np:    nowplaying}, function(response) {});
 
     // Send response to popup.js -- I think? I don't remember why this fixes stuff, but it does, so leave it!
     sendResponse({done: true});
@@ -165,7 +167,11 @@ function main() {
 
 //  Alert the background script of the Hypem tab
 function alertBackground(p, f, s, playlist) {
-  chrome.extension.sendMessage({hype: 'loaded', ps: p, fs: f, sid: s, pl: playlist});
+  chrome.extension.sendMessage({hype: 'loaded',
+                                ps: p,
+                                fs: f,
+                                sid: s,
+                                pl: playlist});
 }
 // Returns artist name
 function getArtist() {
@@ -178,16 +184,21 @@ function getTrackTitle() {
 // Returns post URL wrapping 'Read More'.  HTML.
 function getPost() {
   return $('#player-nowplaying').find('.read').attr('href');
-  //return document.getElementById('player-nowplaying').childNodes[4].getAttribute('href');
 }
-// Returns song ID 
+// Returns song ID
 function getSongID() {
-  return document.getElementById("playerFav").getAttribute("class").split(" ")[0].split("_")[2];
+  return $("#player-nowplaying").children('a')[1].getAttribute('href').split('/')[2];
 }
 // Returns fav state
 function getFavState() {
-   return document.getElementById("playerFav").getAttribute("class").split(" ")[1]; 
-} 
+   var favstate = "fav-off";
+   try {
+    favstate = document.getElementById("playerFav").getAttribute("class").split(" ")[1];
+   } catch(e) {
+
+   }
+   return favstate;
+}
 
 // HAHA THIS IS SO MUCH BETTER THAN THAT GIANT SHITTY FUNCTION THAT USED TO BE HERE YESSSSSS
 function findBlurb(songID) {

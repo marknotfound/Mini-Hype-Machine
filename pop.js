@@ -33,7 +33,7 @@ window.onload = function () {
 	$share_buy = $('#share_buy');
 	$readmore = $share_buy.find('.read-more');
 
-	
+
 	// Bind functions to click events
 	next.onclick = nextSong;
 	prev.onclick = prevSong;
@@ -56,9 +56,9 @@ window.onload = function () {
 
 			// TODO: Move the playlist update stuff into a function
 			// Do playlist items
-			if ( playlist ) 
+			if ( playlist )
 			{
-	    		
+
 	        	$.each(playlist, function(key, hype) {
 	        		if ( hype.track_id )
 	        		{ // This if-block protects from the magical last element which is not actually a track
@@ -80,15 +80,15 @@ window.onload = function () {
 				                   	    setSocialLinks(ele);
 				                   	    setAmazonLink(ele);
 				                   	    pausePlayId(evt.target.id);
-				                   	    $readmore.attr('href', ele.blog_url);			                   	    
+				                   	    $readmore.attr('href', ele.blog_url);
 				                    });
 	        } // End playlist stuff if
 		});
 
-		
 
-	} 
-	else 
+
+	}
+	else
 	{
 		// Just set stuff to the background page values and don't try to send a message.
 		pp.className = bg.playState;
@@ -97,7 +97,7 @@ window.onload = function () {
 		contentDiv.innerHTML = bg.currentBlurb;
 	}
 	// Done setting up buttons!
-	
+
 }
 function nextSong() {
 	if ( !haveTab ) return false;
@@ -106,8 +106,9 @@ function nextSong() {
 	  	pp.className = bg.playState;
 	  	trackDiv.innerHTML = bg.currentTrack;
 	  	contentDiv.innerHTML = bg.currentBlurb;
+        updatePlaylistButtons();
 	});
-	
+
 }
 function prevSong() {
 	if ( !haveTab ) return false;
@@ -116,11 +117,12 @@ function prevSong() {
 		pp.className = bg.playState;
 		trackDiv.innerHTML = bg.currentTrack;
 	  	contentDiv.innerHTML = bg.currentBlurb;
+        updatePlaylistButtons();
 	});
 }
 function pausePlay() {
 	if ( !haveTab ) return false;
-	
+
 	chrome.tabs.sendMessage(tabId, {todo: "pp"}, function(response) {
 		pp.className = bg.playState;
 		updatePlaylistButtons(bg.songId);
@@ -154,7 +156,7 @@ function setAmazonLink(ele) {
     amazon_url = ele.amazon;
     $share_buy.find('.amazon').attr('href', amazon_url);
 }
-function updatePlaylistButtons(songId) {
+function updatePlaylistButtons() {
 	$("#playlist").find("a").attr('class','play');
     $("#play_ctrl_"+bg.songId).attr('class',bg.playState);
 }

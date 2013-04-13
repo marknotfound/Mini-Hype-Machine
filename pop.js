@@ -64,7 +64,7 @@ window.onload = function () {
 	        		{ // This if-block protects from the magical last element which is not actually a track
 	        			var current_status = hype.track_id == bg.songId ? bg.playState : "play"; // If currently playing, show playstate, else play.
 	                    playlist_html += "<div class='playlist-item "+color_class+"'>";
-	                    playlist_html += "<a id='"+hype.play_button+"' class='"+current_status+"' href='#'></a>"+hype.artist+ " - "+hype.track_title;
+	                    playlist_html += "<a id='"+hype.play_button+"' class='playlist-control "+current_status+"' href='#'></a>"+hype.artist+ " - "+hype.track_title;
 	                    playlist_html += "</div>";
 	                    color_class = color_class=="white" ? "" : "white";
 	                }
@@ -136,7 +136,7 @@ function favorite() {
 }
 function pausePlayId(id_selector) {
 	if ( !haveTab ) return false;
-	$playlist_container.find('.playlist-item a').attr('class','play'); // Set all other buttons to play
+	$playlist_container.find('.playlist-item a.playlist-control').removeClass('pause').addClass('play'); // Set all other buttons to play
 	chrome.tabs.sendMessage(tabId, {todo: "click_id", button_id: id_selector}, function(response) {
 		document.getElementById(id_selector).className = bg.playState;
 		pp.className = bg.playState;
@@ -157,6 +157,6 @@ function setAmazonLink(ele) {
     $share_buy.find('.amazon').attr('href', amazon_url);
 }
 function updatePlaylistButtons() {
-	$("#playlist").find("a").attr('class','play');
-    $("#play_ctrl_"+bg.songId).attr('class',bg.playState);
+	$("#playlist").find("a.playlist-control").removeClass('pause').addClass('play');
+    $("#play_ctrl_"+bg.songId).attr('class','playlist-control '+bg.playState);
 }

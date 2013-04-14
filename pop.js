@@ -53,8 +53,9 @@ window.onload = function () {
 			setSocialLinks(bg.nowplaying);
 			setAmazonLink(bg.nowplaying);
 			$readmore.attr('href',bg.readMore);
+            $('#share_buy').show();
 
-			// TODO: Move the playlist update stuff into a function
+            // TODO: Move the playlist update stuff into a function
 			// Do playlist items
 			if ( playlist )
 			{

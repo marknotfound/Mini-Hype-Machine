@@ -43,13 +43,25 @@ function main() {
   favClasses = favButton.getAttribute("class");
 
   // Set initial load junk
-  playState  = playButton.getAttribute("class").split(" ")[2] == "pause" ? "pause" : "play";
+  playState  = $("#playerPlay").hasClass("pause") ? "pause" : "play";
   try {
       favState   = $('#playerFav').hasClass("fav-on") ? "fav-on" : "fav-off";
   } catch(e) {
     favState = "fav-off";
   }
-  songId     = $("#player-nowplaying").children('a')[1].getAttribute('href').split('/')[2];
+  var get_song_id = setInterval(function()
+  {
+      try
+      {
+        songId     = $("#player-nowplaying").children('a')[1].getAttribute('href').split('/')[2];
+      }
+      catch(e)
+      {
+        songId     = false;
+      }
+      if ( songId ) clearInterval(get_song_id);
+  });
+
   playlist   = getPlaylistItems();
 
   // Let background page know the tab loaded.  Send it initial load info.

@@ -10,6 +10,8 @@ Here's some things you can do:
 * Skip/Go back
 * Read the blog post
 * View track/artist information
+* Share what you're listening to on Twitter and Facebook
+* Search Amazon for the track/album/artist
 
 ##Websites and Stuff
 

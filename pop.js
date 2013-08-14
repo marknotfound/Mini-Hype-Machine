@@ -21,6 +21,7 @@ var bg = chrome.extension.getBackgroundPage()
   , tw_url = ''
   , amazon_url = '';
 
+
 window.onload = function () {
 	// Some setup stuff...
 	next = document.getElementById('goNext');

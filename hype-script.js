@@ -131,7 +131,7 @@ function main() {
 
     // Update some things
     songId     = getSongID();
-    playState  = playButton.getAttribute("class").split(" ")[2];
+    playState  = playButton.getAttribute("class").split(" ")[3];
     playState  = playState === undefined ? "play" : playState;
     favState   = getFavState();
     songBlurb  = findBlurb(songId);
@@ -209,11 +209,11 @@ function getSongID() {
 // Returns fav state
 function getFavState() {
    var favstate = "fav-off";
+   
    try {
-    favstate = document.getElementById("playerFav").getAttribute("class").split(" ")[1];
-   } catch(e) {
+    favstate = document.getElementById("playerFav").getAttribute("class").split(" ")[2];
+   } catch(e) {}
 
-   }
    return favstate;
 }
 

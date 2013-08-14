@@ -1,6 +1,6 @@
 {
   "name": "Mini Hype Machine",
-  "version": "2.2.13",
+  "version": "2.3",
   "manifest_version": 2,
   "description": "Pause, skip, favorite, and read about each song on Hypem.com without ever having to find the tab!",
   "permissions": ["tabs"],
@@ -15,12 +15,12 @@
     "128": "images/icon128.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["js/background.js"]
   },
   "content_scripts": [
     {
       "matches": ["http://hypem.com/*"],
-      "js": ["hype-script.js","jquery-1.9.1.min.js"]
+      "js": ["js/jquery.min.js", "js/Parser.js", "js/hype-script.js"]
     }
   ]
 }

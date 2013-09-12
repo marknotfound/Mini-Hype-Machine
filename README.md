@@ -13,6 +13,9 @@ Here's some things you can do:
 * Share what you're listening to on Twitter and Facebook
 * Search Amazon for the track/album/artist
 
+##This Branch
+Is hacked together and works but is ugly. For the fresh code, check the rewrite branch.
+
 ##Websites and Stuff
 
 http://www.dunphtastic.com

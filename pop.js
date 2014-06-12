@@ -41,6 +41,18 @@ window.onload = function () {
 	pp.onclick = pausePlay;
 	fav.onclick = favorite;
 
+    // Hotkeys
+    var hotkeys =
+        {   74: nextSong // J
+        ,   75: prevSong // K
+        ,   32: pausePlay // Spacebar
+        ,   70: favorite // F
+        }
+    $(document).bind('keyup', function(e) {
+        var code = e.keyCode || e.which;
+        if (hotkeys[code]) hotkeys[code]();
+    });
+
 	// Set up the buttons
 	// Update all controls.
 	if ( haveTab )

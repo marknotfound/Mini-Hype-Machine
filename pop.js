@@ -44,7 +44,11 @@ window.onload = function () {
     // Hotkeys
     var hotkeys =
         {   74: nextSong // J
+        ,   78: nextSong // N
+        ,   39: nextSong // ->
         ,   75: prevSong // K
+        ,   80: prevSong // P
+        ,   37: prevSong // <-
         ,   32: pausePlay // Spacebar
         ,   70: favorite // F
         }

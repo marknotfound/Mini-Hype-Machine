@@ -17,8 +17,8 @@ Here's some things you can do:
 Is hacked together and works but is ugly. For the fresh code, check the rewrite branch.
 
 ##Contributors
-* @markdunphy
-* @chr1sbest
+* [Mark Dunphy](https://github.com/markdunphy)
+* [Chris Best](https://github.com/chr1sbest)
 
 ##Websites and Stuff
 

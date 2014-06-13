@@ -16,6 +16,10 @@ Here's some things you can do:
 ##This Branch
 Is hacked together and works but is ugly. For the fresh code, check the rewrite branch.
 
+##Contributors
+* @markdunphy
+* @chr1sbest
+
 ##Websites and Stuff
 
 http://www.dunphtastic.com

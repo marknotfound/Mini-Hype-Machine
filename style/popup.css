@@ -1,0 +1,228 @@
+@font-face {
+  font-family: "machine_bitsregular";
+  src: url("../fonts/machinebits-regular-webfont.woff");
+}
+html, body {
+  background-color: #F3F3F3;
+  padding: 0px;
+  min-width: 400px;
+  max-width:600px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Helvetica','Arial',sans-serif;
+  color: #000000;
+  font-weight: bold;
+}
+#controlsDiv {
+  background-color: #83C441;
+  height: 34px;
+  padding-top: 10px;
+}
+#controls {
+  background-color: black;
+  float: right;
+  margin-top: -1px;
+  height: 33px;
+  padding-top: 2px;
+}
+#playlist {
+  max-height: 190px;
+  overflow-y: scroll;
+}
+#logo {
+  float: left;
+  display: block;
+  height: 28px;
+  width: 234px;
+  font-size: 44px;
+  font-family: "machine_bitsregular";
+  font-weight: normal;
+  color: #000;
+  margin-top: -20px;
+  margin-left: 5px;
+}
+#logo:before {
+  content: "1";
+}
+#logo:hover {
+  color: #fff;
+}
+#banner {
+  background-color: transparent;
+}
+#track {
+  background-color: #000000;
+  color: #FFFFFF;
+  padding: 5px 0px 5px 0px;
+  font-size: 14px;
+}
+#content {
+  font-size: 14px;
+  font-weight: normal;
+  color: #555;
+  border-top: 2px solid #ffffff;
+  text-align: left;
+}
+#content a {
+  color: #0063DC;
+  font-size: 12px;
+  text-decoration: none;
+}
+#content a:hover {
+  color: #0063DC;
+  text-decoration: underline;
+}
+#blurb {
+  padding: 5px 8px;
+}
+a {
+  outline: none;
+  text-decoration: none;
+}
+#track a {
+  color: #FFFFFF;
+  text-decoration: none;
+  outline: none;
+}
+#track a:hover {
+  text-decoration: underline;
+}
+#previous, #play, #next, #favorite {
+  border-left: 1px solid #272727;
+  cursor: pointer;
+  display: block;
+  float: left;
+  height: 33px;
+  overflow: hidden;
+  top: 0;
+  width: 33px;
+}
+#previous, #next {
+  background: url(../images/player-controls-new.png) no-repeat;
+}
+#previous {
+  background-position: -64px 0px;
+  border-left: 1px solid #272727;
+}
+#previous:hover {
+  background-position: -64px -32px;
+}
+#next {
+  background-position: -96px 0px;
+  border-right: 1px solid #272727;
+}
+#next:hover {
+  background-position: -96px -32px;
+}
+#share-twitter, #share-facebook {
+  font-family: "machine_bitsregular";
+  font-weight: normal;
+  color: #000 !important;
+  font-size: 16px !important;
+  margin-left: 5px !important;
+  display: block;
+}
+#share-twitter:hover, #share-facebook:hover {
+  color: #0063DC !important;
+  text-decoration: none !important;
+}
+#share-twitter:before {
+  content: "t";
+}
+#share-facebook:before {
+  content: "f";
+}
+.play, .pause, .play:hover, .pause:hover {
+  background: url(../images/player-controls-new.png) no-repeat;
+}
+.play {
+  background-position: 0px 0px;
+}
+.pause {
+  background-position: -32px 0px;
+}
+.play:hover, .playlist-item a:hover {
+  background-position: 0px -32px;
+}
+.pause:hover {
+  background-position: -32px -32px;
+}
+.fav-on {
+  background: url(../images/icon-fav-player.png) no-repeat;
+  background-position: 0 -64px;
+}
+.fav-off {
+  background: url(../images/icon-fav-player.png) no-repeat;
+  background-position: 0 0px;
+}
+.fav-off:hover {
+  background: url(../images/icon-fav-player.png) no-repeat;
+  background-position: 0 -32px;
+}
+.playlist-item {
+  padding: 5px 0px;
+  clear: both;
+  width: auto;
+  overflow:hidden;
+  line-height:19px;
+  height: 17px;
+}
+.playlist-item a.play {
+  background-position: 0px -58px;
+}
+.playlist-item a.play:hover {
+  background-position: 0px -31px;
+}
+.playlist-item a.pause {
+  background-position: -24px -58px;
+}
+.playlist-item a.pause:hover {
+  background-position: -24px -31px;
+}
+.playlist-item a, .playlist-item a:hover {
+  float: left;
+  display: block;
+  width: 25px;
+  height: 20px;
+  background-size: 96px 80px;
+}
+.playlist-item a.track {
+  text-decoration: none;
+  font-size:14px !important;
+  color: #555 !important;
+  float:none;
+  width: auto;
+  height: auto;
+  display: inline;
+}
+.hide {
+  display: none;
+}
+#share-buy {
+  padding:5px 8px;
+  clear:both;
+  background-color:#fff;
+  font-size:12px;
+  height:15px;
+}
+#share-buy a {
+  float:right;
+  width: 15px;
+  height: 15px;
+  margin: 0px 1px;
+  background: none;
+  border: none;
+}
+#share-buy a.zocial {
+  margin: -5px 1px;
+  color: #000;
+}
+#share-buy
+#read-more {
+  float: left !important;
+  width: auto !important;
+  margin: 0px !important;
+}
+.white {
+  background-color: #fff;
+}
